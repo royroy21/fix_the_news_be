@@ -75,7 +75,7 @@ WSGI_APPLICATION = 'fix_the_news.core.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.contrib.gis.db.backends.postgis',
+        'ENGINE': 'django.db.backends.postgresql',
         'NAME': 'postgres',
         'USER': 'docker',
         'PASSWORD': 'docker',
