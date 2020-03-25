@@ -30,6 +30,14 @@ ALLOWED_HOSTS = []
 
 # Application definition
 
+LOCAL_APPS = [
+    'fix_the_news.users',
+]
+
+THIRD_PARTY_APPS = [
+    'django_extensions',
+]
+
 INSTALLED_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',
@@ -37,7 +45,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-]
+] + LOCAL_APPS + THIRD_PARTY_APPS
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -68,22 +76,6 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = 'fix_the_news.core.wsgi.application'
-
-
-# Database
-# https://docs.djangoproject.com/en/3.0/ref/settings/#databases
-
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'postgres',
-        'USER': 'docker',
-        'PASSWORD': 'docker',
-        'HOST': 'db',
-        'PORT': 5432,
-    }
-}
-
 
 # Password validation
 # https://docs.djangoproject.com/en/3.0/ref/settings/#auth-password-validators
@@ -122,3 +114,21 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/3.0/howto/static-files/
 
 STATIC_URL = '/static/'
+
+# Custom settings
+
+AUTH_USER_MODEL = 'users.User'
+LOGIN_FIELD = 'email'
+
+# Environment specific
+
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'postgres',
+        'USER': 'docker',
+        'PASSWORD': 'docker',
+        'HOST': 'db',
+        'PORT': 5432,
+    }
+}
