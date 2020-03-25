@@ -37,7 +37,7 @@ class Topic(DateCreatedUpdatedMixin):
     def __str__(self):
         return f"{self.title} ({self.user})"
 
-    def check_categories(self):
+    def check_all_categories_exist(self):
         topic_categories = self.categories.values_list("type", flat=True)
         all_categories = [
             category_type
