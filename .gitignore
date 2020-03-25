@@ -1,0 +1,8 @@
+# local media
+media/
+
+# ide
+.idea
+
+# python
+__pycache__
