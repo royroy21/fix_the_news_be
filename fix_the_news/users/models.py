@@ -60,11 +60,11 @@ class User(auth_models.AbstractBaseUser, auth_models.PermissionsMixin):
         },
     )
     username = models.CharField(
-        _('handle'),
+        _('username'),
         max_length=254,
         unique=True,
         error_messages={
-            'unique': _("User with that handle already exists."),
+            'unique': _("User with that username already exists."),
         },
     )
     avatar = models.ImageField(upload_to="avatars", blank=True, null=True)
