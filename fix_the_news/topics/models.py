@@ -40,8 +40,8 @@ class Topic(DateCreatedUpdatedMixin):
     def check_categories(self):
         topic_categories = self.categories.values_list("type", flat=True)
         all_categories = [
-            _type[0]
-            for _type
+            category_type
+            for category_type, _
             in Category.TYPE_CHOICES
         ]
         return sorted(topic_categories) == sorted(all_categories)

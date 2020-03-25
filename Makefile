@@ -44,4 +44,4 @@ shell:
 	$(MAKE) manage ARGS="shell_plus ${ARGS}"
 
 test:
-	$(MAKE) manage ARGS="test ${ARGS}"
+	$(MAKE) manage ARGS="test fix_the_news${ARGS}"
