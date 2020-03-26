@@ -13,6 +13,10 @@ services:
       - 25432:5432
   django:
     build: .
+    # TODO - Must fix. Having to disable reload to use ipdb.
+    # to get a container up and working with ipdb
+    # docker-compose run --rm --service-ports django
+    # command: python3 manage.py runserver 0.0.0.0:8000 --noreload
     command: python3 manage.py runserver 0.0.0.0:8000
     restart: unless-stopped
     volumes:
