@@ -10,7 +10,9 @@ from fix_the_news.topics import models as topics_models
 
 class NewsItemViewSet(CustomModelViewSet):
     serializer_class = serializers.NewsItemSerializer
-    queryset = models.NewsItem.objects.filter(active=True).order_by("title")
+    queryset = models.NewsItem.objects\
+        .filter(active=True)\
+        .order_by("-date_created")
 
     PARAM_FOR = topics_models.Category.TYPE_FOR
     PARAM_NEUTRAL = topics_models.Category.TYPE_NEUTRAL
