@@ -1,5 +1,6 @@
 from django.db.models import Q
 from rest_framework import authentication, permissions, viewsets, status
+from rest_framework.pagination import PageNumberPagination
 from rest_framework.response import Response
 
 from fix_the_news.api.news_items import serializers
@@ -9,6 +10,7 @@ from fix_the_news.topics import models as topics_models
 
 
 class NewsItemViewSet(CustomModelViewSet):
+    pagination_class = PageNumberPagination
     serializer_class = serializers.NewsItemSerializer
     queryset = models.NewsItem.objects\
         .filter(active=True)\
@@ -46,6 +48,7 @@ class NewsItemViewSet(CustomModelViewSet):
 
 
 class NewsTypeViewSet(viewsets.ReadOnlyModelViewSet):
+    pagination_class = PageNumberPagination
     authentication_classes = [authentication.TokenAuthentication]
     permission_classes = [permissions.IsAuthenticated]
     serializer_class = serializers.NewsTypeSerializer
