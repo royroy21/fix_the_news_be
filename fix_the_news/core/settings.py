@@ -39,6 +39,9 @@ LOCAL_APPS = [
 THIRD_PARTY_APPS = [
     'corsheaders',
     'django_extensions',
+    'djoser',
+    'rest_framework',
+    'rest_framework.authtoken',
 ]
 
 INSTALLED_APPS = [
@@ -53,6 +56,7 @@ INSTALLED_APPS = [
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
+    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
@@ -121,9 +125,33 @@ STATIC_URL = '/static/'
 # Custom settings
 
 AUTH_USER_MODEL = 'users.User'
+
+DJOSER = {
+    'LOGIN_FIELD': 'email',
+    'SERIALIZERS': {
+        'token_create': 'fix_the_news.api.auth.serializers.'
+                        'TokenCreateSerializer',
+        'current_user': 'fix_the_news.api.users.serializers.'
+                        'CurrentUserSerializer',
+        'user_create_password_retype': 'fix_the_news.api.users.serializers.'
+                                       'CreatePasswordRetypeSerializer',
+    },
+    'USER_CREATE_PASSWORD_RETYPE': True,
+}
+
 LOGIN_FIELD = 'email'
 
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        'rest_framework.authentication.TokenAuthentication',
+    ),
+}
+
 # Environment specific
+
+CORS_ORIGIN_WHITELIST = (
+    "http://localhost:3000",
+)
 
 DATABASES = {
     'default': {
@@ -135,3 +163,27 @@ DATABASES = {
         'PORT': 5432,
     }
 }
+
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'handlers': {
+        'console': {
+            'class': 'logging.StreamHandler',
+        },
+    },
+    'loggers': {
+        '': {
+            'level': 'WARNING',
+            'handlers': ['console'],
+        },
+        'fix_the_news': {
+            'handlers': ['console'],
+            'level': 'DEBUG',
+            'propagate': False,
+        },
+    },
+}
+
+MEDIA_ROOT = os.path.join(BASE_DIR, '../../media')
+MEDIA_URL = "/media/"
