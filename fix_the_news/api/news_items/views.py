@@ -43,7 +43,7 @@ class NewsItemViewSet(CustomModelViewSet):
         return super().create(*args, **kwargs)
 
 
-class NewsTypeViewSet(viewsets.ModelViewSet):
+class NewsTypeViewSet(viewsets.ReadOnlyModelViewSet):
     authentication_classes = [authentication.TokenAuthentication]
     permission_classes = [permissions.IsAuthenticated]
     serializer_class = serializers.NewsTypeSerializer

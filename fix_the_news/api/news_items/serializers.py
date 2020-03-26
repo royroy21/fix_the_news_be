@@ -34,9 +34,3 @@ class NewsTypeSerializer(serializers.ModelSerializer):
             'title',
         )
         read_only_fields = fields
-
-    def create(self, validated_data):
-        raise ValidationError("Cannot create")
-
-    def update(self, instance, validated_data):
-        raise ValidationError("Cannot update")
