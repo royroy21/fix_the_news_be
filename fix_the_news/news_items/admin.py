@@ -12,7 +12,8 @@ class NewsItemAdmin(admin.ModelAdmin):
         "topic__title"
         "type__title",
         "user__email",
-        "user__username",
+        "user__first_name",
+        "user__last_name",
         "url",
         "category__title",
     )

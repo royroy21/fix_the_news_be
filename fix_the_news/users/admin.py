@@ -8,7 +8,8 @@ class UserAdmin(BaseUserAdmin):
     fieldsets = (
         (None, {'fields': (
             'email',
-            'username',
+            'first_name',
+            'last_name',
             'password',
             'last_login',
         )}),
@@ -27,7 +28,8 @@ class UserAdmin(BaseUserAdmin):
             ),
             'fields': (
                 'email',
-                'username',
+                'first_name',
+                'last_name',
                 'password1',
                 'password2',
             ),
@@ -36,7 +38,8 @@ class UserAdmin(BaseUserAdmin):
 
     list_display = (
         'email',
-        'username',
+        'first_name',
+        'last_name',
         'is_staff',
         'last_login',
     )
@@ -48,7 +51,8 @@ class UserAdmin(BaseUserAdmin):
     )
     search_fields = (
         'email',
-        'username',
+        'first_name',
+        'last_name',
     )
     ordering = (
         'email',

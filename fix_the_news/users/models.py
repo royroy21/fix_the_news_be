@@ -59,14 +59,8 @@ class User(auth_models.AbstractBaseUser, auth_models.PermissionsMixin):
             'unique': _("User with that email address already exists."),
         },
     )
-    username = models.CharField(
-        _('username'),
-        max_length=254,
-        unique=True,
-        error_messages={
-            'unique': _("User with that username already exists."),
-        },
-    )
+    first_name = models.CharField(_('first_name'), max_length=254)
+    last_name = models.CharField(_('last_name'), max_length=254)
     avatar = models.ImageField(upload_to="avatars", blank=True, null=True)
 
     is_staff = models.BooleanField(default=False)

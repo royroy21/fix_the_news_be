@@ -23,7 +23,8 @@ class CurrentUserSerializer(DjoserUserSerializer):
             settings.LOGIN_FIELD,
             "avatar",
             "id",
-            "username",
+            "first_name",
+            "last_name",
         )
         read_only_fields = (
             settings.LOGIN_FIELD,
@@ -48,7 +49,8 @@ class CreatePasswordRetypeSerializer(DjoserUserCreateSerializer):
             settings.LOGIN_FIELD,
             "password",
             "re_password",
-            "username",
+            "first_name",
+            "last_name",
         )
 
     def validate(self, attrs):

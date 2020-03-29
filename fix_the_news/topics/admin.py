@@ -11,7 +11,8 @@ class CategoryAdmin(admin.ModelAdmin):
         "title",
         "type",
         "user__email",
-        "user__username",
+        "user__first_name",
+        "user__last_name",
     )
 
 
@@ -22,7 +23,8 @@ class TopicAdmin(admin.ModelAdmin):
     search_fields = (
         "title",
         "user__email",
-        "user__username",
+        "user__first_name",
+        "user__last_name",
     )
 
 
