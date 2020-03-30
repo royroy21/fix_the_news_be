@@ -47,6 +47,7 @@ class CreatePasswordRetypeSerializer(DjoserUserCreateSerializer):
         model = User
         fields = (
             settings.LOGIN_FIELD,
+            "avatar",
             "password",
             "re_password",
             "first_name",
