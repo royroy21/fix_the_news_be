@@ -9,10 +9,11 @@ class Command(BaseCommand):
     help = 'Creates news types from {}'.format(NEWS_TYPE_FILE)
 
     def handle(self, *args, **options):
-        with open(self.NEWS_TYPE_FILE) as f:
+        with open(self.NEWS_TYPE_FILE) as csv_file:
             news_types = [
-                NewsType(title=title.capitalize())
-                for title, _ in csv.reader(f)
+                NewsType(title=row["title"].capitalize())
+                for row
+                in csv.DictReader(csv_file)
             ]
             self.stdout.write(self.style.SUCCESS(
                 f"creating {len(news_types)} new news types"
