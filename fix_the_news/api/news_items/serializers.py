@@ -1,10 +1,13 @@
 from rest_framework import serializers
 from rest_framework.exceptions import ValidationError
 
+from fix_the_news.api.topics.serializers import CategorySerializer
 from fix_the_news.news_items import models
 
 
 class NewsItemSerializer(serializers.ModelSerializer):
+
+    category = CategorySerializer()
 
     class Meta:
         model = models.NewsItem
