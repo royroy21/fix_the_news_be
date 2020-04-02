@@ -6,7 +6,11 @@ from fix_the_news.core.models import DateCreatedUpdatedMixin
 class NewsItem(DateCreatedUpdatedMixin):
     active = models.BooleanField(default=True)
     title = models.CharField(max_length=254)
-    topic = models.ForeignKey("topics.Topic", on_delete=models.CASCADE)
+    topic = models.ForeignKey(
+        "topics.Topic",
+        on_delete=models.CASCADE,
+        related_name="news_items",
+    )
     type = models.ForeignKey(
         "news_items.NewsType",
         on_delete=models.SET_DEFAULT,
