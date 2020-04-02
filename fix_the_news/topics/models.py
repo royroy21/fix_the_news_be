@@ -18,6 +18,11 @@ class Category(DateCreatedUpdatedMixin):
         (TYPE_NEUTRAL, "Neutral"),
         (TYPE_AGAINST, "Against"),
     ]
+    ALL_TYPE_CHOICES = [
+        type_choice
+        for type_choice, _
+        in TYPE_CHOICES
+    ]
     type = models.CharField(
         choices=TYPE_CHOICES,
         default=TYPE_NEUTRAL,
@@ -45,3 +50,8 @@ class Topic(DateCreatedUpdatedMixin):
             in Category.TYPE_CHOICES
         ]
         return sorted(topic_categories) == sorted(all_categories)
+
+    def get_top_news_items(self, category, amount=3):
+        return self.news_items\
+            .filter(category__type=category)\
+            .order_by("-date_created")[:amount]
