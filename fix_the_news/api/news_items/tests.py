@@ -56,26 +56,29 @@ class TestNewsItemViewSet(TestCase):
     def test_no_filters(self):
         response = self.unauthenticated_client.get(self.list_endpoint)
         self.assertEqual(response.status_code, 200)
-        self.assertEqual(len(response.json()), 3)
+        self.assertEqual(len(response.json()["results"]), 3)
 
     def test_filter_for_category_news_items(self):
         params = {"for": True}
         response = self.unauthenticated_client.get(self.list_endpoint, params)
         self.assertEqual(response.status_code, 200)
-        self.assertEqual(len(response.data), 1)
-        self.assertEqual(response.json()[0]["title"], self.for_news_item.title)
+        results = response.json()["results"]
+        self.assertEqual(len(results), 1)
+        self.assertEqual(results[0]["title"], self.for_news_item.title)
 
     def test_filter_for_and_against_category_news_items(self):
         params = {"for": True, "against": True}
         response = self.unauthenticated_client.get(self.list_endpoint, params)
 
         self.assertEqual(response.status_code, 200)
-        self.assertEqual(len(response.data), 2)
+
+        results = response.json()["results"]
+        self.assertEqual(len(results), 2)
 
         response_titles = sorted([
             news_item["title"]
             for news_item
-            in response.json()
+            in results
         ])
         expected_titles = sorted([
             self.for_news_item.title,
