@@ -17,7 +17,7 @@ class CategorySerializer(serializers.ModelSerializer):
 
 class TopicSerializer(serializers.ModelSerializer):
 
-    serialized_categories = CategorySerializer(many=True, read_only=True)
+    serialized_categories = serializers.SerializerMethodField()
     news_items_count = serializers.SerializerMethodField()
     top_news_items = serializers.SerializerMethodField()
 
@@ -40,6 +40,9 @@ class TopicSerializer(serializers.ModelSerializer):
             for key
             in models.Category.ALL_TYPE_CHOICES
         }
+
+    def get_serialized_categories(self, obj):
+        return CategorySerializer(obj.categories.all(), many=True).data
 
     def get_top_news_items(self, obj):
         from fix_the_news.api.news_items.serializers import NewsItemSerializer
