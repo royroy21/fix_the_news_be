@@ -1,9 +1,12 @@
 from django.db import models
 
+from fix_the_news.core.managers import ActiveManager
 from fix_the_news.core.models import DateCreatedUpdatedMixin
 
 
 class NewsItem(DateCreatedUpdatedMixin):
+    objects = ActiveManager()
+
     active = models.BooleanField(default=True)
     title = models.CharField(max_length=254)
     topic = models.ForeignKey(
