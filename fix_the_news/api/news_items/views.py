@@ -13,7 +13,7 @@ class NewsItemViewSet(CustomModelViewSet):
     pagination_class = PageNumberPagination
     serializer_class = serializers.NewsItemSerializer
     queryset = models.NewsItem.objects\
-        .filter(active=True)\
+        .get_active()\
         .order_by("-date_created")
 
     PARAM_FOR = topics_models.Category.TYPE_FOR
