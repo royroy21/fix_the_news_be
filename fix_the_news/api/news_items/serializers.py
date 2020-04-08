@@ -7,7 +7,7 @@ from fix_the_news.news_items import models
 
 class NewsItemSerializer(serializers.ModelSerializer):
 
-    category = CategorySerializer()
+    serialized_category = CategorySerializer(read_only=True)
 
     class Meta:
         model = models.NewsItem
@@ -17,6 +17,7 @@ class NewsItemSerializer(serializers.ModelSerializer):
             'title',
             'topic',
             'type',
+            'serialized_category',
             'user',
             'url',
         )
