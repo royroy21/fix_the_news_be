@@ -31,7 +31,6 @@ ALLOWED_HOSTS = []
 # Application definition
 
 LOCAL_APPS = [
-    'fix_the_news.core',
     'fix_the_news.news_items',
     'fix_the_news.topics',
     'fix_the_news.users',
