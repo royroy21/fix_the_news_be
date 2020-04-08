@@ -17,16 +17,16 @@ class CategorySerializer(serializers.ModelSerializer):
 
 class TopicSerializer(serializers.ModelSerializer):
 
-    categories = CategorySerializer(many=True)
+    serialized_categories = CategorySerializer(many=True, read_only=True)
     news_items_count = serializers.SerializerMethodField()
     top_news_items = serializers.SerializerMethodField()
 
     class Meta:
         model = models.Topic
         fields = (
-            "categories",
             "id",
             "news_items_count",
+            "serialized_categories",
             "title",
             "top_news_items",
             "user",
