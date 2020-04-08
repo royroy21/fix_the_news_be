@@ -4,7 +4,7 @@ from fix_the_news.users import models as users_models
 
 
 class Command(BaseCommand):
-    DATA_FILE = "/code/fix_the_news/core/data/development_test_data.csv"
+    DATA_FILE = "/code/fix_the_news/topics/data/development_test_data.csv"
     help = f"Deletes test data created by create_development_data"
 
     def handle(self, *args, **options):
