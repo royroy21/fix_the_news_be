@@ -20,6 +20,7 @@ usage:
 	@echo "migrations       Create Django migrations"
 	@echo "shell            Run Django command line"
 	@echo "test             Run Django tests"
+	@echo "tests             Run Django tests"
 	@echo "usage            Display available commands"
 
 chown:
@@ -45,3 +46,6 @@ shell:
 
 test:
 	$(MAKE) manage ARGS="test fix_the_news${ARGS}"
+
+tests:
+	$(MAKE) test
