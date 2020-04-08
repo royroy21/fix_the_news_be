@@ -7,7 +7,7 @@ from fix_the_news.news_items import models
 
 class NewsItemSerializer(serializers.ModelSerializer):
 
-    serialized_category = CategorySerializer(read_only=True)
+    serialized_category = serializers.SerializerMethodField()
 
     class Meta:
         model = models.NewsItem
@@ -24,6 +24,9 @@ class NewsItemSerializer(serializers.ModelSerializer):
         read_only_fields = (
             'id',
         )
+
+    def get_serialized_category(self, obj):
+        return CategorySerializer(obj.category).data
 
     def update(self, instance, validated_data):
         raise ValidationError("Cannot update")
