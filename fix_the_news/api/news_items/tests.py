@@ -121,4 +121,4 @@ class TestNewsItemViewSet(TestCase):
         self.assertEqual(response.status_code, 401)
         news_item_exists = \
             models.NewsItem.objects.filter(title=data["title"]).exists()
-        self.assertFalse(news_item_exists)
+        self.assertTrue(news_item_exists)
