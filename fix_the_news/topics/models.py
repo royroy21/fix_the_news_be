@@ -54,6 +54,16 @@ class Topic(DateCreatedUpdatedMixin):
         ]
         return sorted(topic_categories) == sorted(all_categories)
 
+    def create_missing_categories(self):
+        topic_categories = self.categories.values_list("type", flat=True)
+        missing_categories = [
+            Category(topic=self, type=category_type, user=self.user)
+            for category_type, _
+            in Category.TYPE_CHOICES
+            if category_type not in topic_categories
+        ]
+        return Category.objects.bulk_create(missing_categories)
+
     def get_top_news_items(self, category, amount=3):
         return self.news_items\
             .get_active()\
