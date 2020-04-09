@@ -15,9 +15,16 @@ class Command(BaseCommand):
         news_item_type, _ = \
             news_items_models.NewsType.objects.get_or_create(title="Article")
 
+        topics_ids = set()
+
         with open(self.DATA_FILE) as csv_file:
             reader = csv.DictReader(csv_file)
             for row in reader:
+                if len(row.keys()) != len(reader.fieldnames):
+                    self.stdout.write(self.style.ERROR(
+                        f"problem encountered: skipping row {row}"
+                    ))
+
                 user, _ = users_models.User.objects.get_or_create(**{
                     "email": row["email"],
                     "first_name": row["first_name"],
@@ -43,4 +50,19 @@ class Command(BaseCommand):
                 })
                 self.stdout.write(self.style.SUCCESS(
                     f"Created news item: {news_item_title}"
+                ))
+                topics_ids.add(topic.id)
+
+        for topic_id in topics_ids:
+            topic = topics_models.Topic.objects.get(id=topic_id)
+            created_missing_categories = topic.create_missing_categories()
+            if created_missing_categories:
+                missing_categories_types = ",".join(
+                    category.type
+                    for category
+                    in created_missing_categories
+                )
+                self.stdout.write(self.style.SUCCESS(
+                    f"Created missing categories '{missing_categories_types}',"
+                    f" for topic: ({topic.id}) {topic.title}"
                 ))
