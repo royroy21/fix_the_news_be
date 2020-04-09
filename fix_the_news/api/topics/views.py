@@ -9,5 +9,5 @@ class TopicViewSet(viewsets.ReadOnlyModelViewSet):
     pagination_class = PageNumberPagination
     serializer_class = serializers.TopicSerializer
     queryset = models.Topic.objects\
-        .get_active()\
+        .filter(active=True)\
         .order_by("-date_created")

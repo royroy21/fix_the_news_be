@@ -1,6 +1,4 @@
 from django.db import models
-
-from fix_the_news.core.managers import ActiveManager
 from fix_the_news.core.models import DateCreatedUpdatedMixin
 
 
@@ -36,8 +34,6 @@ class Category(DateCreatedUpdatedMixin):
 
 
 class Topic(DateCreatedUpdatedMixin):
-    objects = ActiveManager()
-
     active = models.BooleanField(default=True)
     title = models.CharField(max_length=254, unique=True)
     user = models.ForeignKey("users.User", on_delete=models.CASCADE)
@@ -66,6 +62,5 @@ class Topic(DateCreatedUpdatedMixin):
 
     def get_top_news_items(self, category, amount=3):
         return self.news_items\
-            .get_active()\
-            .filter(category__type=category)\
+            .filter(active=True, category__type=category)\
             .order_by("-date_created")[:amount]

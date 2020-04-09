@@ -1,5 +1,4 @@
 from rest_framework import serializers
-
 from fix_the_news.topics import models
 
 
@@ -35,8 +34,7 @@ class TopicSerializer(serializers.ModelSerializer):
 
     def get_news_items_count(self, obj):
         return {
-            key: obj.news_items.get_active().filter(
-                category__type=key).count()
+            key: obj.news_items.filter(active=True, category__type=key).count()
             for key
             in models.Category.ALL_TYPE_CHOICES
         }
