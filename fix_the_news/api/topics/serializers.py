@@ -42,7 +42,17 @@ class TopicSerializer(serializers.ModelSerializer):
         }
 
     def get_serialized_categories(self, obj):
-        return CategorySerializer(obj.categories.all(), many=True).data
+        """ Returns serialized categories sorted by category type choices """
+        data_with_key = {
+            category["type"]: category
+            for category
+            in CategorySerializer(obj.categories.all(), many=True).data
+        }
+        return [
+            data_with_key[category_type]
+            for category_type, _
+            in models.Category.TYPE_CHOICES
+        ]
 
     def get_top_news_items(self, obj):
         from fix_the_news.api.news_items.serializers import NewsItemSerializer
