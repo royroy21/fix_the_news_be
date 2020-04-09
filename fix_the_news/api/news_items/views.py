@@ -26,20 +26,19 @@ class NewsItemViewSet(CustomModelViewSet):
     ]
 
     def get_queryset(self):
-        filters = None
-
+        categories_filters = Q()
         for param in self.ALL_PARAMS:
             query_param = self.request.query_params.get(param, None)
             if query_param:
-                if not filters:
-                    filters = Q(category__type=param)
-                else:
-                    filters = filters | Q(category__type=param)
+                categories_filters = categories_filters \
+                                     | Q(category__type=param)
 
-        if filters:
-            return self.queryset.filter(filters)
+        filters = {}
+        topic = self.request.query_params.get("topic", None)
+        if topic:
+            filters.update({"topic": topic})
 
-        return super().get_queryset()
+        return super().get_queryset().filter(categories_filters, **filters)
 
     def create(self, *args, **kwargs):
         if not self.request.user.is_authenticated:
