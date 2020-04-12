@@ -11,9 +11,21 @@ class Command(BaseCommand):
     DATA_FILE = "/code/fix_the_news/topics/data/development_test_data.csv"
     help = f"Creates test data for development environment from {DATA_FILE}"
 
+    ADMIN_EMAIL = "admin@example.com"
+    ADMIN_PASSWORD = "glassonion"
+
     def handle(self, *args, **options):
         news_item_type, _ = \
             news_items_models.NewsType.objects.get_or_create(title="Article")
+
+        admin_query = users_models.User.objects.filter(email=self.ADMIN_EMAIL)
+        if admin_query.exists():
+            admin = admin_query.first()
+        else:
+            admin = users_models.User.objects.create_user(
+                email=self.ADMIN_EMAIL,
+                password=self.ADMIN_PASSWORD,
+            )
 
         topics_ids = set()
 
@@ -24,14 +36,13 @@ class Command(BaseCommand):
                     self.stdout.write(self.style.ERROR(
                         f"problem encountered: skipping row {row}"
                     ))
-
                 user, _ = users_models.User.objects.get_or_create(**{
                     "email": row["email"],
                     "first_name": row["first_name"],
                     "last_name": row["last_name"],
                 })
                 topic, _ = topics_models.Topic.objects.get_or_create(**{
-                    "user": user,
+                    "user": admin,
                     "title": row["topic_title"],
                 })
                 category, _ = topics_models.Category.objects.get_or_create(**{
