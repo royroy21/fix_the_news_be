@@ -50,14 +50,18 @@ class Command(BaseCommand):
                     "topic": topic,
                     "type": row["topic_category"],
                 })
+                news_url = row["news_item_url"]
+                news_source, _ = news_items_models.NewsSource.objects\
+                    .get_or_create(hostname=news_url)
                 news_item_title = row["news_item_title"]
                 news_items_models.NewsItem.objects.get_or_create(**{
                     "title": news_item_title,
                     "topic": topic,
                     "type": news_item_type,
                     "user": user,
-                    "url": row["news_item_url"],
+                    "url": news_url,
                     "category": category,
+                    "news_source": news_source,
                 })
                 self.stdout.write(self.style.SUCCESS(
                     f"Created news item: {news_item_title}"
