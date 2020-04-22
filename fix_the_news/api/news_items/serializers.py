@@ -1,3 +1,4 @@
+import requests
 from rest_framework import serializers
 from rest_framework.exceptions import ValidationError
 
@@ -47,13 +48,16 @@ class NewsItemSerializer(serializers.ModelSerializer):
         raise ValidationError("Cannot update")
 
     def validate_url(self, url):
-        # TODO - check if url is valid here?
         if url.startswith("http://"):
-            return url.replace("http://", "https://")
+            url = url.replace("http://", "https://")
         elif not url.startswith("https://"):
-            return f"https://{url}"
-        else:
-            return url
+            url = f"https://{url}"
+
+        response = requests.get(url)
+        if not response.ok:
+            raise ValidationError("Sorry for URL provided was not valid")
+
+        return url
 
 
 class NewsTypeSerializer(serializers.ModelSerializer):
