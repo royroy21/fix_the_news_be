@@ -53,7 +53,7 @@ class NewsItemSerializer(serializers.ModelSerializer):
         elif not url.startswith("https://"):
             url = f"https://{url}"
 
-        error_message = "Sorry for URL provided was not valid"
+        error_message = "Sorry URL provided was not valid"
         try:
             response = requests.get(url)
         except requests.exceptions.SSLError:
