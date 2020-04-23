@@ -29,14 +29,14 @@ class NewsItemSerializer(serializers.ModelSerializer):
             'id',
         )
 
+    def get_news_source(self, obj):
+        return obj.news_source.get_name()
+
     def get_serialized_category(self, obj):
         return CategorySerializer(obj.category).data
 
     def get_serialized_type(self, obj):
         return NewsTypeSerializer(obj.type).data
-
-    def get_news_source(self, obj):
-        return obj.news_source.get_name()
 
     def create(self, validated_data):
         news_source, _ = models.NewsSource.objects\
@@ -53,9 +53,13 @@ class NewsItemSerializer(serializers.ModelSerializer):
         elif not url.startswith("https://"):
             url = f"https://{url}"
 
-        response = requests.get(url)
+        error_message = "Sorry for URL provided was not valid"
+        try:
+            response = requests.get(url)
+        except requests.exceptions.SSLError:
+            raise ValidationError(error_message)
         if not response.ok:
-            raise ValidationError("Sorry for URL provided was not valid")
+            raise ValidationError(error_message)
 
         return url
 
