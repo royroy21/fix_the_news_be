@@ -47,13 +47,9 @@ class NewsSource(DateCreatedUpdatedMixin):
     objects = NewsSourceManager()
     hostname = models.CharField(max_length=254)
     formatted_name = models.CharField(max_length=254, blank=True, default="")
-    favicon = models.ImageField(upload_to="favicons", blank=True, null=True)
 
     def get_name(self):
-        return self.formatted_name or self.hostname
-
-    def get_favicon(self):
-        return
+        return self.formatted_name or self.hostname.lstrip("www.")
 
     def __str__(self):
         return f"{self.hostname} ({self.formatted_name or ' ?? '})"
