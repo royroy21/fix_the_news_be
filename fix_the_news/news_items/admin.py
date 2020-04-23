@@ -28,5 +28,36 @@ class NewsTypeAdmin(admin.ModelAdmin):
     )
 
 
+class NewsSourceFilter(admin.SimpleListFilter):
+    title = "has formatted name"
+    parameter_name = "has_formatted_name"
+
+    def lookups(self, request, model_admin):
+        return (
+            ("yes", "Yes"),
+            ("no",  "No"),
+        )
+
+    def queryset(self, request, queryset):
+        if self.value() == 'yes':
+            return queryset.exclude(formatted_name="")
+        if self.value() == 'no':
+            return queryset.filter(formatted_name="")
+
+
+class NewsSourceAdmin(admin.ModelAdmin):
+    list_filter = (
+        NewsSourceFilter,
+    )
+    ordering = (
+        "hostname",
+    )
+    search_fields = (
+        "hostname",
+        "formatted_name",
+    )
+
+
 admin.site.register(models.NewsItem, NewsItemAdmin)
 admin.site.register(models.NewsType, NewsTypeAdmin)
+admin.site.register(models.NewsSource, NewsSourceAdmin)

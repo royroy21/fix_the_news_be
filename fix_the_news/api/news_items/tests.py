@@ -1,3 +1,5 @@
+from unittest.mock import patch
+
 from django_dynamic_fixture import G
 from django.test import TestCase
 from django.urls import reverse
@@ -105,7 +107,10 @@ class TestNewsItemViewSet(TestCase):
             "category": self.for_category.id,
         }
 
-    def test_create_with_authenticated_user(self):
+    @patch('requests.get')
+    def test_create_with_authenticated_user(self, mock_request):
+        mock_request.ok = True
+
         data = self.get_create_new_news_item_data()
         response = \
             self.authenticated_client.post(self.list_endpoint, data=data)
