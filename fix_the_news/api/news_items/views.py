@@ -1,4 +1,3 @@
-from django.db.models import Q
 from rest_framework import authentication, permissions, viewsets, status
 from rest_framework.pagination import PageNumberPagination
 from rest_framework.response import Response
@@ -16,29 +15,21 @@ class NewsItemViewSet(CustomModelViewSet):
         .filter(active=True)\
         .order_by("-date_created")
 
-    PARAM_FOR = topics_models.Category.TYPE_FOR
-    PARAM_NEUTRAL = topics_models.Category.TYPE_NEUTRAL
-    PARAM_AGAINST = topics_models.Category.TYPE_AGAINST
     ALL_PARAMS = [
-        PARAM_FOR,
-        PARAM_NEUTRAL,
-        PARAM_AGAINST,
+        topics_models.Category.TYPE_FOR,
+        topics_models.Category.TYPE_NEUTRAL,
+        topics_models.Category.TYPE_AGAINST,
     ]
 
     def get_queryset(self):
-        categories_filters = Q()
-        for param in self.ALL_PARAMS:
-            query_param = self.request.query_params.get(param, None)
-            if query_param:
-                categories_filters = categories_filters \
-                                     | Q(category__type=param)
-
         filters = {}
-        topic = self.request.query_params.get("topic", None)
+        category = self.request.query_params.get("category")
+        if category:
+            filters.update({"category__type": category})
+        topic = self.request.query_params.get("topic")
         if topic:
             filters.update({"topic": topic})
-
-        return super().get_queryset().filter(categories_filters, **filters)
+        return super().get_queryset().filter(**filters)
 
     def create(self, *args, **kwargs):
         if not self.request.user.is_authenticated:
