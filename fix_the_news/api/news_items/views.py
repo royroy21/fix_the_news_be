@@ -1,4 +1,4 @@
-from rest_framework import authentication, permissions, viewsets, status
+from rest_framework import status
 from rest_framework.pagination import PageNumberPagination
 from rest_framework.response import Response
 
@@ -35,11 +35,3 @@ class NewsItemViewSet(CustomModelViewSet):
         if not self.request.user.is_authenticated:
             return Response(status=status.HTTP_401_UNAUTHORIZED)
         return super().create(*args, **kwargs)
-
-
-class NewsTypeViewSet(viewsets.ReadOnlyModelViewSet):
-    pagination_class = PageNumberPagination
-    authentication_classes = [authentication.TokenAuthentication]
-    permission_classes = [permissions.IsAuthenticated]
-    serializer_class = serializers.NewsTypeSerializer
-    queryset = models.NewsType.objects.order_by("title")

@@ -9,7 +9,6 @@ from fix_the_news.news_items import models
 class NewsItemSerializer(serializers.ModelSerializer):
     news_source = serializers.SerializerMethodField()
     serialized_category = serializers.SerializerMethodField()
-    serialized_type = serializers.SerializerMethodField()
 
     class Meta:
         model = models.NewsItem
@@ -19,9 +18,7 @@ class NewsItemSerializer(serializers.ModelSerializer):
             'news_source',
             'title',
             'topic',
-            'type',
             'serialized_category',
-            'serialized_type',
             'user',
             'url',
         )
@@ -34,9 +31,6 @@ class NewsItemSerializer(serializers.ModelSerializer):
 
     def get_serialized_category(self, obj):
         return CategorySerializer(obj.category).data
-
-    def get_serialized_type(self, obj):
-        return NewsTypeSerializer(obj.type).data
 
     def create(self, validated_data):
         news_source, _ = models.NewsSource.objects\
@@ -62,14 +56,3 @@ class NewsItemSerializer(serializers.ModelSerializer):
             raise ValidationError(error_message)
 
         return url
-
-
-class NewsTypeSerializer(serializers.ModelSerializer):
-
-    class Meta:
-        model = models.NewsType
-        fields = (
-            'id',
-            'title',
-        )
-        read_only_fields = fields

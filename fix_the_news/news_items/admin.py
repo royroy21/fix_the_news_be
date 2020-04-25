@@ -19,15 +19,6 @@ class NewsItemAdmin(admin.ModelAdmin):
     )
 
 
-class NewsTypeAdmin(admin.ModelAdmin):
-    ordering = (
-        "date_created",
-    )
-    search_fields = (
-        "title",
-    )
-
-
 class NewsSourceFilter(admin.SimpleListFilter):
     title = "has formatted name"
     parameter_name = "has_formatted_name"
@@ -59,5 +50,4 @@ class NewsSourceAdmin(admin.ModelAdmin):
 
 
 admin.site.register(models.NewsItem, NewsItemAdmin)
-admin.site.register(models.NewsType, NewsTypeAdmin)
 admin.site.register(models.NewsSource, NewsSourceAdmin)

@@ -15,9 +15,6 @@ class Command(BaseCommand):
     ADMIN_PASSWORD = "glassonion"
 
     def handle(self, *args, **options):
-        news_item_type, _ = \
-            news_items_models.NewsType.objects.get_or_create(title="Article")
-
         admin_query = users_models.User.objects.filter(email=self.ADMIN_EMAIL)
         if admin_query.exists():
             admin = admin_query.first()
@@ -57,7 +54,6 @@ class Command(BaseCommand):
                 news_items_models.NewsItem.objects.get_or_create(**{
                     "title": news_item_title,
                     "topic": topic,
-                    "type": news_item_type,
                     "user": user,
                     "url": news_url,
                     "category": category,

@@ -12,11 +12,6 @@ class NewsItem(DateCreatedUpdatedMixin):
         on_delete=models.CASCADE,
         related_name="news_items",
     )
-    type = models.ForeignKey(
-        "news_items.NewsType",
-        on_delete=models.SET_DEFAULT,
-        default=None,
-    )
     user = models.ForeignKey("users.User", on_delete=models.CASCADE)
     url = models.CharField(max_length=254)
     category = models.ForeignKey("topics.Category", on_delete=models.CASCADE)
@@ -28,13 +23,6 @@ class NewsItem(DateCreatedUpdatedMixin):
 
     def __str__(self):
         return f"{self.title} ({self.topic})"
-
-
-class NewsType(DateCreatedUpdatedMixin):
-    title = models.CharField(max_length=254, unique=True)
-
-    def __str__(self):
-        return self.title
 
 
 class NewsSourceManager(models.Manager):

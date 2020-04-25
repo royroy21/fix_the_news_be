@@ -35,24 +35,20 @@ class TestNewsItemViewSet(TestCase):
             type=topics_models.Category.TYPE_AGAINST,
             topic=self.topic,
         )
-        self.news_type = G(models.NewsType)
         self.for_news_item = G(
             models.NewsItem,
             category=self.for_category,
             title="This news item is for",
-            type=self.news_type,
         )
         self.neutral_news_item = G(
             models.NewsItem,
             category=self.neutral_category,
             title="This news item is neutral",
-            type=self.news_type,
         )
         self.against_news_item = G(
             models.NewsItem,
             category=self.against_category,
             title="This news item is against",
-            type=self.news_type,
         )
 
     def test_delete(self):
@@ -69,7 +65,6 @@ class TestNewsItemViewSet(TestCase):
         return {
             "title": "A new news item",
             "topic": self.topic.id,
-            "type": self.news_type.id,
             "url": "www.news.com",
             "category": self.for_category.id,
         }
