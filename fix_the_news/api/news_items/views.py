@@ -25,7 +25,7 @@ class NewsItemViewSet(CustomModelViewSet):
         filters = {}
         category = self.request.query_params.get("category")
         if category:
-            filters.update({"category__type": category})
+            filters.update({"category": category})
         topic = self.request.query_params.get("topic")
         if topic:
             filters.update({"topic": topic})
