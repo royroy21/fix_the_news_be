@@ -61,6 +61,7 @@ class Topic(DateCreatedUpdatedMixin):
         return Category.objects.bulk_create(missing_categories)
 
     def get_top_news_items(self, category, amount=3):
+        # TODO - this slows the topics API when there are many news items
         return self.news_items\
             .filter(active=True, category__type=category)\
             .order_by("-date_created")[:amount]
