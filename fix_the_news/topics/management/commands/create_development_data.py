@@ -33,39 +33,39 @@ class Command(BaseCommand):
                     self.stdout.write(self.style.ERROR(
                         f"problem encountered: skipping row {row}"
                     ))
-                user, _ = users_models.User.objects.get_or_create(**{
-                    "email": row["email"],
-                    "first_name": row["first_name"],
-                    "last_name": row["last_name"],
-                })
-                topic, _ = topics_models.Topic.objects.get_or_create(**{
-                    "user": admin,
-                    "title": row["topic_title"],
-                })
-                category_query = topics_models.Category.objects.filter(**{
-                    "topic": topic,
-                    "type": row["topic_category"],
-                })
+                user, _ = users_models.User.objects.get_or_create(
+                    email=row["email"],
+                    first_name=row["first_name"],
+                    last_name=row["last_name"],
+                )
+                topic, _ = topics_models.Topic.objects.get_or_create(
+                    user=admin,
+                    title=row["topic_title"],
+                )
+                category_query = topics_models.Category.objects.filter(
+                    topic=topic,
+                    type=row["topic_category"],
+                )
                 if category_query.exists():
                     category = category_query.first()
                 else:
-                    category = topics_models.Category.objects.create(**{
-                        "user": user,
-                        "topic": topic,
-                        "type": row["topic_category"],
-                    })
+                    category = topics_models.Category.objects.create(
+                        user=user,
+                        topic=topic,
+                        type=row["topic_category"],
+                    )
                 news_url = row["news_item_url"]
                 news_source, _ = news_items_models.NewsSource.objects\
                     .get_or_create(hostname=news_url)
                 news_item_title = row["news_item_title"]
-                news_items_models.NewsItem.objects.get_or_create(**{
-                    "title": news_item_title,
-                    "topic": topic,
-                    "user": user,
-                    "url": news_url,
-                    "category": category,
-                    "news_source": news_source,
-                })
+                news_items_models.NewsItem.objects.get_or_create(
+                    title=news_item_title,
+                    topic=topic,
+                    user=user,
+                    url=news_url,
+                    category=category,
+                    news_source=news_source,
+                )
                 self.stdout.write(self.style.SUCCESS(
                     f"Created news item: {news_item_title}"
                 ))
