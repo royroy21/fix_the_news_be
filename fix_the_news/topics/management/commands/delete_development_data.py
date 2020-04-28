@@ -9,16 +9,17 @@ class Command(BaseCommand):
 
     def handle(self, *args, **options):
         with open(self.DATA_FILE) as csv_file:
-            user_emails = set([
+            emails = set([
                 row["email"]
                 for row
                 in csv.DictReader(csv_file)
             ])
+            emails.add("admin@example.com")
             users_models.User.objects\
-                .filter(email__in=user_emails)\
+                .filter(email__in=emails)\
                 .delete()
 
-        formatted_emails = ", ".join(user_emails)
+        formatted_emails = ", ".join(emails)
         self.stdout.write(self.style.SUCCESS(
             f"Deleted data for users: {formatted_emails}"
         ))
