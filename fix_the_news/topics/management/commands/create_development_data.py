@@ -42,11 +42,18 @@ class Command(BaseCommand):
                     "user": admin,
                     "title": row["topic_title"],
                 })
-                category, _ = topics_models.Category.objects.get_or_create(**{
-                    "user": user,
+                category_query = topics_models.Category.objects.filter(**{
                     "topic": topic,
                     "type": row["topic_category"],
                 })
+                if category_query.exists():
+                    category = category_query.first()
+                else:
+                    category = topics_models.Category.objects.create(**{
+                        "user": user,
+                        "topic": topic,
+                        "type": row["topic_category"],
+                    })
                 news_url = row["news_item_url"]
                 news_source, _ = news_items_models.NewsSource.objects\
                     .get_or_create(hostname=news_url)
