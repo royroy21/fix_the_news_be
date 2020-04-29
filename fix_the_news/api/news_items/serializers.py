@@ -1,4 +1,5 @@
 import requests
+from requests import exceptions as requests_exceptions
 from rest_framework import serializers
 from rest_framework.exceptions import ValidationError
 
@@ -50,7 +51,11 @@ class NewsItemSerializer(serializers.ModelSerializer):
         error_message = "Sorry URL provided was not valid"
         try:
             response = requests.get(url)
-        except requests.exceptions.SSLError:
+        except (
+            requests_exceptions.ConnectionError,
+            requests_exceptions.ConnectTimeout,
+            requests_exceptions.SSLError,
+        ):
             raise ValidationError(error_message)
         if not response.ok:
             raise ValidationError(error_message)
