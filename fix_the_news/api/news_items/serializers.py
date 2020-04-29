@@ -1,3 +1,5 @@
+import logging
+
 import requests
 from requests import exceptions as requests_exceptions
 from rest_framework import serializers
@@ -5,6 +7,8 @@ from rest_framework.exceptions import ValidationError
 
 from fix_the_news.api.topics.serializers import CategorySerializer
 from fix_the_news.news_items import models
+
+logger = logging.getLogger(__name__)
 
 
 class NewsItemSerializer(serializers.ModelSerializer):
@@ -55,7 +59,8 @@ class NewsItemSerializer(serializers.ModelSerializer):
             requests_exceptions.ConnectionError,
             requests_exceptions.ConnectTimeout,
             requests_exceptions.SSLError,
-        ):
+        ) as error:
+            logger.error(f"Problem validating URL:{url} {error}")
             raise ValidationError(error_message)
         if not response.ok:
             raise ValidationError(error_message)
