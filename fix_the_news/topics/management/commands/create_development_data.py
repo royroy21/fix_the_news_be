@@ -12,7 +12,7 @@ class Command(BaseCommand):
     help = f"Creates test data for development environment from {DATA_FILE}"
 
     ADMIN_EMAIL = "admin@example.com"
-    ADMIN_PASSWORD = "glassonion"
+    ADMIN_PASSWORD = "cats"
 
     def handle(self, *args, **options):
         admin_query = users_models.User.objects.filter(email=self.ADMIN_EMAIL)
