@@ -16,8 +16,10 @@ services:
     # TODO - Must fix. Having to disable reload to use ipdb.
     # to get a container up and working with ipdb
     # docker-compose run --rm --service-ports django
-    # command: python3 manage.py runserver 0.0.0.0:8000 --noreload --settings=settings.local
-    command: python3 manage.py runserver 0.0.0.0:8000 --settings=settings.local
+    # command: python3 manage.py runserver 0.0.0.0:8000 --noreload
+    command: python3 manage.py runserver 0.0.0.0:8000
+    environment:
+      - DJANGO_SETTINGS_MODULE=settings.local
     restart: unless-stopped
     volumes:
       - .:/code
