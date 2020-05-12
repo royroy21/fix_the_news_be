@@ -15,4 +15,6 @@ DATABASES = {
     }
 }
 
-# TODO - media to be stored on s3 bucket
+# TODO - media to be stored on s3 bucket ?
+STATIC_ROOT = '/static'
+MEDIA_ROOT = '/media'
