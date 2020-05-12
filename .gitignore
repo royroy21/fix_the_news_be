@@ -6,4 +6,6 @@ media/
 
 # python
 __pycache__
-.venv
+
+# virtualenv
+venv
