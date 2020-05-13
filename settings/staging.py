@@ -1,5 +1,9 @@
 from .base import *
 
+ALLOWED_HOSTS = [
+    os.environ["DJANGO_HOST"],
+]
+
 CORS_ORIGIN_WHITELIST = (
     os.environ["WEB_APP_URL"],
 )
