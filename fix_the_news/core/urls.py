@@ -14,7 +14,6 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.conf import settings
-from django.conf.urls import url
 from django.conf.urls.static import static
 from django.contrib import admin
 from django.urls import path, include
@@ -23,10 +22,10 @@ from fix_the_news.api.routes import api_router
 
 
 urlpatterns = [
-    path('admin/', admin.site.urls),
-    url(r"^auth/", include("djoser.urls.base")),
-    url(r"^auth/", include("djoser.urls.authtoken")),
-    url("^api/", include(api_router.urls)),
+    path("api/admin/", admin.site.urls),
+    path("api/authentication/", include("djoser.urls.base")),
+    path("api/authentication/", include("djoser.urls.authtoken")),
+    path("api/", include(api_router.urls)),
 ]
 
 if settings.DEBUG:
