@@ -5,7 +5,8 @@ ALLOWED_HOSTS = [
 ]
 
 CORS_ORIGIN_WHITELIST = (
-    os.environ["WEB_APP_URL"],
+    f"http://{os.environ['WEB_APP_HOST']}",
+    f"https://{os.environ['WEB_APP_HOST']}",
 )
 
 DATABASES = {
