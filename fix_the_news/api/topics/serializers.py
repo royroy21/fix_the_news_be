@@ -2,7 +2,7 @@ from rest_framework import serializers
 from fix_the_news.topics import models
 
 
-class CategorySerializer(serializers.ModelSerializer):
+class CategoryReadOnlySerializer(serializers.ModelSerializer):
 
     class Meta:
         model = models.Category
@@ -44,7 +44,7 @@ class TopicSerializer(serializers.ModelSerializer):
         data_with_key = {
             category["type"]: category
             for category
-            in CategorySerializer(obj.categories.all(), many=True).data
+            in CategoryReadOnlySerializer(obj.categories.all(), many=True).data
         }
         return [
             data_with_key[category_type]
