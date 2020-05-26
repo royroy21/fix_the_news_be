@@ -60,3 +60,17 @@ class CreatePasswordRetypeSerializer(DjoserUserCreateSerializer):
         if attrs['password'] != re_password:
             self.fail('password_mismatch')
         return attrs
+
+
+class UserReadOnlySerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = User
+        fields = tuple(User.REQUIRED_FIELDS) + (
+            settings.LOGIN_FIELD,
+            "avatar",
+            "id",
+            "first_name",
+            "last_name",
+        )
+        read_only_fields = fields
