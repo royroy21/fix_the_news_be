@@ -1,16 +1,18 @@
-from rest_framework import status
+from rest_framework import status, mixins
 from rest_framework.decorators import action
 from rest_framework.response import Response
+from rest_framework.viewsets import GenericViewSet
 
 from fix_the_news.api.comments import serializers
-from fix_the_news.api.pagination import CustomPageNumberPagination
-from fix_the_news.api.views import CustomModelViewSet
+from fix_the_news.api.views import CustomCreateModelMixin
 from fix_the_news.comments import models
 from fix_the_news.news_items import models as news_items_models
 
 
-class CommentViewSet(CustomModelViewSet):
-    pagination_class = CustomPageNumberPagination
+class CommentViewSet(CustomCreateModelMixin,
+                     mixins.RetrieveModelMixin,
+                     GenericViewSet):
+
     serializer_class = serializers.CommentSerializer
     queryset = models.Comment.objects\
         .filter(active=True)\
