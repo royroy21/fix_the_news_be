@@ -14,4 +14,4 @@ class Comment(DateCreatedUpdatedMixin):
     user = models.ForeignKey('users.User', on_delete=models.CASCADE)
 
     def __str__(self):
-        return f'linked to {self.content_type.name}, f{self.user.email}'
+        return f'linked to {self.content_type.name}, {self.user.email}'
