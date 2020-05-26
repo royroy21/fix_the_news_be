@@ -7,9 +7,9 @@ class CategoryReadOnlySerializer(serializers.ModelSerializer):
     class Meta:
         model = models.Category
         fields = (
-            "id",
-            "title",
-            "type",
+            'id',
+            'title',
+            'type',
         )
         read_only_fields = fields
 
@@ -23,12 +23,13 @@ class TopicReadOnlySerializer(serializers.ModelSerializer):
     class Meta:
         model = models.Topic
         fields = (
-            "id",
-            "news_items_count",
-            "serialized_categories",
-            "title",
-            "top_news_items",
-            "user",
+            'id',
+            'date_created',
+            'news_items_count',
+            'serialized_categories',
+            'title',
+            'top_news_items',
+            'user',
         )
         read_only_fields = fields
 
