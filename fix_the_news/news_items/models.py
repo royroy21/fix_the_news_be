@@ -1,5 +1,6 @@
 from urllib.parse import urlparse
 
+from django.contrib.contenttypes.fields import GenericRelation
 from django.db import models
 from fix_the_news.core.models import DateCreatedUpdatedMixin
 
@@ -20,6 +21,7 @@ class NewsItem(DateCreatedUpdatedMixin):
         on_delete=models.CASCADE,
         related_name="news_items",
     )
+    comments = GenericRelation('comments.Comment')
 
     def __str__(self):
         return f"{self.title} ({self.topic})"

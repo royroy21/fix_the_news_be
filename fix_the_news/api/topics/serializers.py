@@ -2,19 +2,19 @@ from rest_framework import serializers
 from fix_the_news.topics import models
 
 
-class CategorySerializer(serializers.ModelSerializer):
+class CategoryReadOnlySerializer(serializers.ModelSerializer):
 
     class Meta:
         model = models.Category
         fields = (
-            "id",
-            "title",
-            "type",
+            'id',
+            'title',
+            'type',
         )
         read_only_fields = fields
 
 
-class TopicSerializer(serializers.ModelSerializer):
+class TopicReadOnlySerializer(serializers.ModelSerializer):
 
     serialized_categories = serializers.SerializerMethodField()
     news_items_count = serializers.SerializerMethodField()
@@ -23,12 +23,13 @@ class TopicSerializer(serializers.ModelSerializer):
     class Meta:
         model = models.Topic
         fields = (
-            "id",
-            "news_items_count",
-            "serialized_categories",
-            "title",
-            "top_news_items",
-            "user",
+            'id',
+            'date_created',
+            'news_items_count',
+            'serialized_categories',
+            'title',
+            'top_news_items',
+            'user',
         )
         read_only_fields = fields
 
@@ -44,7 +45,7 @@ class TopicSerializer(serializers.ModelSerializer):
         data_with_key = {
             category["type"]: category
             for category
-            in CategorySerializer(obj.categories.all(), many=True).data
+            in CategoryReadOnlySerializer(obj.categories.all(), many=True).data
         }
         return [
             data_with_key[category_type]
