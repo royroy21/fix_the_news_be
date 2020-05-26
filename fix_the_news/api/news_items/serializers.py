@@ -49,9 +49,8 @@ class NewsItemSerializer(serializers.ModelSerializer):
         return CategoryReadOnlySerializer(obj.category).data
 
     def get_serialized_comments(self, obj):
-        return CommentReadOnlySerializer(
-            instance=obj.comments.order_by('-date_created'),
-            many=True).data
+        comments = obj.comments.filter(active=True).order_by('-date_created')
+        return CommentReadOnlySerializer(instance=comments, many=True).data
 
     def get_serialized_user(self, obj):
         return UserReadOnlySerializer(obj.user).data

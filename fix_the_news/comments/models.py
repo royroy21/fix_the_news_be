@@ -6,6 +6,7 @@ from fix_the_news.core.models import DateCreatedUpdatedMixin
 
 
 class Comment(DateCreatedUpdatedMixin):
+    active = models.BooleanField(default=True)
     comments = GenericRelation('comments.Comment')
     content_object = GenericForeignKey('content_type', 'object_id')
     content_type = models.ForeignKey(ContentType, on_delete=models.CASCADE)
