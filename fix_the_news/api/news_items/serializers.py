@@ -23,6 +23,7 @@ class NewsItemSerializer(serializers.ModelSerializer):
         model = models.NewsItem
         fields = (
             'category',
+            'date_created',
             'id',
             'news_source',
             'serialized_category',
@@ -35,6 +36,7 @@ class NewsItemSerializer(serializers.ModelSerializer):
         )
         read_only_fields = (
             'id',
+            'date_created',
             'serialized_category',
             'serialized_comments',
             'serialized_user',
