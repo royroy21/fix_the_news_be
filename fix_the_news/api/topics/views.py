@@ -7,7 +7,7 @@ from fix_the_news.topics import models
 
 class TopicViewSet(viewsets.ReadOnlyModelViewSet):
     pagination_class = CustomPageNumberPagination
-    serializer_class = serializers.TopicSerializer
+    serializer_class = serializers.TopicReadOnlySerializer
     queryset = models.Topic.objects\
         .filter(active=True)\
         .order_by("-date_created")

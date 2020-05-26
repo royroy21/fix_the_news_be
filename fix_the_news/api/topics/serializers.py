@@ -14,7 +14,7 @@ class CategoryReadOnlySerializer(serializers.ModelSerializer):
         read_only_fields = fields
 
 
-class TopicSerializer(serializers.ModelSerializer):
+class TopicReadOnlySerializer(serializers.ModelSerializer):
 
     serialized_categories = serializers.SerializerMethodField()
     news_items_count = serializers.SerializerMethodField()
