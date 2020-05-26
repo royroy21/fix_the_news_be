@@ -5,7 +5,9 @@ from requests import exceptions as requests_exceptions
 from rest_framework import serializers
 from rest_framework.exceptions import ValidationError
 
-from fix_the_news.api.topics.serializers import CategorySerializer
+from fix_the_news.api.comments.serializers import CommentReadOnlySerializer
+from fix_the_news.api.topics.serializers import CategoryReadOnlySerializer
+from fix_the_news.api.users.serializers import UserReadOnlySerializer
 from fix_the_news.news_items import models
 
 logger = logging.getLogger(__name__)
@@ -14,6 +16,8 @@ logger = logging.getLogger(__name__)
 class NewsItemSerializer(serializers.ModelSerializer):
     news_source = serializers.SerializerMethodField()
     serialized_category = serializers.SerializerMethodField()
+    serialized_comments = serializers.SerializerMethodField()
+    serialized_user = serializers.SerializerMethodField()
 
     class Meta:
         model = models.NewsItem
@@ -21,21 +25,34 @@ class NewsItemSerializer(serializers.ModelSerializer):
             'category',
             'id',
             'news_source',
+            'serialized_category',
+            'serialized_comments',
+            'serialized_user',
             'title',
             'topic',
-            'serialized_category',
             'user',
             'url',
         )
         read_only_fields = (
             'id',
+            'serialized_category',
+            'serialized_comments',
+            'serialized_user',
         )
 
     def get_news_source(self, obj):
         return obj.news_source.get_name()
 
     def get_serialized_category(self, obj):
-        return CategorySerializer(obj.category).data
+        return CategoryReadOnlySerializer(obj.category).data
+
+    def get_serialized_comments(self, obj):
+        return CommentReadOnlySerializer(
+            instance=obj.comments.order_by('-date_created'),
+            many=True).data
+
+    def get_serialized_user(self, obj):
+        return UserReadOnlySerializer(obj.user).data
 
     def create(self, validated_data):
         news_source, _ = models.NewsSource.objects\
