@@ -10,8 +10,7 @@ from fix_the_news.users import models as users_models
 
 class TestCommentViewSet(TestCase):
 
-    link_to_comment_endpoint = reverse("comment-link-to-comment")
-    link_to_news_item_endpoint = reverse("comment-link-to-news-item")
+    endpoint = reverse('comment-list')
 
     def setUp(self):
         self.authenticated_client = APIClient()
@@ -20,11 +19,11 @@ class TestCommentViewSet(TestCase):
     def test_link_to_missing_comment(self):
         another_comment_text = 'another comment'
         data = {
-            'content_object': 999,
+            'comment': 999,
             'text': another_comment_text,
         }
         response = self.authenticated_client.post(
-            self.link_to_comment_endpoint,
+            self.endpoint,
             data=data,
         )
         self.assertEqual(response.status_code, 400)
@@ -34,11 +33,11 @@ class TestCommentViewSet(TestCase):
 
         another_comment_text = 'another comment'
         data = {
-            'content_object': existing_comment.id,
+            'comment': existing_comment.id,
             'text': another_comment_text,
         }
         response = self.authenticated_client.post(
-            self.link_to_comment_endpoint,
+            self.endpoint,
             data=data,
         )
         self.assertEqual(response.status_code, 201)
@@ -55,11 +54,11 @@ class TestCommentViewSet(TestCase):
 
         comment_text = 'a comment'
         data = {
-            'content_object': news_item.id,
+            'news_item': news_item.id,
             'text': comment_text,
         }
         response = self.authenticated_client.post(
-            self.link_to_news_item_endpoint,
+            self.endpoint,
             data=data,
         )
         self.assertEqual(response.status_code, 201)
