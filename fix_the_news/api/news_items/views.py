@@ -3,11 +3,11 @@ from rest_framework.response import Response
 
 from fix_the_news.api.news_items import serializers
 from fix_the_news.api.pagination import CustomPageNumberPagination
-from fix_the_news.api.views import CustomModelViewSet
+from fix_the_news.api.views import CustomCreateRetrieveListViewSet
 from fix_the_news.news_items import models
 
 
-class NewsItemViewSet(CustomModelViewSet):
+class NewsItemViewSet(CustomCreateRetrieveListViewSet):
     pagination_class = CustomPageNumberPagination
     serializer_class = serializers.NewsItemSerializer
     queryset = models.NewsItem.objects\

@@ -53,9 +53,6 @@ class NewsItemSerializer(serializers.ModelSerializer):
         validated_data["news_source"] = news_source
         return super().create(validated_data)
 
-    def update(self, instance, validated_data):
-        raise ValidationError("Cannot update")
-
     def validate_url(self, url):
         if url.startswith("http://"):
             url = url.replace("http://", "https://")
