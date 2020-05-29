@@ -6,7 +6,7 @@ from fix_the_news.comments import models
 from fix_the_news.news_items import models as news_items_models
 
 
-class TestCommentGenericRelations(TestCase):
+class TestComment(TestCase):
 
     def setUp(self):
         self.comment_text = 'this is a comment'
@@ -20,7 +20,7 @@ class TestCommentGenericRelations(TestCase):
             title=self.news_item_title,
         )
 
-    def test_add_by_generic_relation(self):
+    def test_add_news_item(self):
         self.news_item.comments.add(self.comment)
 
         self.assertEqual(
@@ -28,24 +28,11 @@ class TestCommentGenericRelations(TestCase):
             self.comment_text,
         )
         self.assertEqual(
-            self.comment.content_object.title,
+            self.comment.news_item.title,
             self.news_item_title,
         )
 
-    def test_add_by_content_object(self):
-        self.comment.content_object = self.news_item
-        self.comment.save()
-
-        self.assertEqual(
-            self.news_item.comments.first().text,
-            self.comment_text,
-        )
-        self.assertEqual(
-            self.comment.content_object.title,
-            self.news_item_title,
-        )
-
-    def test_add_comments_to_a_comment(self):
+    def test_add_comment(self):
         another_comment = G(models.Comment, text=self.comment_text)
         self.comment.comments.add(another_comment)
 

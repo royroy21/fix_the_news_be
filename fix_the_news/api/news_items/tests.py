@@ -56,7 +56,7 @@ class TestNewsItemViewSet(TestCase):
         detail_endpoint = \
             reverse("newsitem-detail", kwargs={"pk": self.for_news_item})
         response = self.unauthenticated_client.delete(detail_endpoint)
-        self.assertEqual(response.status_code, 404)
+        self.assertEqual(response.status_code, 405)
         news_item_exists = \
             models.NewsItem.objects.filter(id=self.for_news_item.id).exists()
         self.assertTrue(news_item_exists)
