@@ -19,6 +19,13 @@ class CustomCreateModelMixin(mixins.CreateModelMixin):
         )
 
 
+class CustomCreateRetrieveListViewSet(CustomCreateModelMixin,
+                                      mixins.RetrieveModelMixin,
+                                      mixins.ListModelMixin,
+                                      GenericViewSet):
+    pass
+
+
 class CustomModelViewSet(CustomCreateModelMixin,
                          mixins.RetrieveModelMixin,
                          mixins.UpdateModelMixin,
