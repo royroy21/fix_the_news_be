@@ -3,7 +3,7 @@ from rest_framework.response import Response
 from rest_framework.viewsets import GenericViewSet
 
 
-class CustomCreateModelMixin(mixins.CreateModelMixin):
+class CustomCreateModelMixin(GenericViewSet, mixins.CreateModelMixin):
 
     def create(self, request, *args, **kwargs):
         data = request.data.copy()
@@ -19,17 +19,29 @@ class CustomCreateModelMixin(mixins.CreateModelMixin):
         )
 
 
+class CustomListModelMixin(GenericViewSet, mixins.ListModelMixin):
+
+    allowed_filters = []
+
+    def get_queryset(self):
+        filters = {
+            key: self.request.query_params.get(key)
+            for key
+            in self.allowed_filters
+            if self.request.query_params.get(key)
+        }
+        return super().get_queryset().filter(**filters)
+
+
 class CustomCreateRetrieveListViewSet(CustomCreateModelMixin,
-                                      mixins.RetrieveModelMixin,
-                                      mixins.ListModelMixin,
-                                      GenericViewSet):
+                                      CustomListModelMixin,
+                                      mixins.RetrieveModelMixin):
     pass
 
 
 class CustomModelViewSet(CustomCreateModelMixin,
+                         CustomListModelMixin,
                          mixins.RetrieveModelMixin,
                          mixins.UpdateModelMixin,
-                         mixins.DestroyModelMixin,
-                         mixins.ListModelMixin,
-                         GenericViewSet):
+                         mixins.DestroyModelMixin):
     pass

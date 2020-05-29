@@ -8,21 +8,15 @@ from fix_the_news.news_items import models
 
 
 class NewsItemViewSet(CustomCreateRetrieveListViewSet):
+    allowed_filters = [
+        'category',
+        'topic',
+    ]
     pagination_class = CustomPageNumberPagination
-    serializer_class = serializers.NewsItemSerializer
     queryset = models.NewsItem.objects\
         .filter(active=True)\
         .order_by("-date_created")
-
-    def get_queryset(self):
-        filters = {}
-        category = self.request.query_params.get("category")
-        if category:
-            filters.update({"category": category})
-        topic = self.request.query_params.get("topic")
-        if topic:
-            filters.update({"topic": topic})
-        return super().get_queryset().filter(**filters)
+    serializer_class = serializers.NewsItemSerializer
 
     def create(self, *args, **kwargs):
         if not self.request.user.is_authenticated:

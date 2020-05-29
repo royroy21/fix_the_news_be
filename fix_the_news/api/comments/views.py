@@ -8,21 +8,15 @@ from fix_the_news.comments import models
 
 
 class CommentViewSet(CustomCreateRetrieveListViewSet):
+    allowed_filters = [
+        'category',
+        'news_item',
+    ]
     pagination_class = CustomPageNumberPagination
-    serializer_class = serializers.CommentSerializer
     queryset = models.Comment.objects\
         .filter(active=True)\
         .order_by("-date_created")
-
-    def get_queryset(self):
-        filters = {}
-        category = self.request.query_params.get("category")
-        if category:
-            filters.update({"category": category})
-        topic = self.request.query_params.get("news_item")
-        if topic:
-            filters.update({"news_item": topic})
-        return super().get_queryset().filter(**filters)
+    serializer_class = serializers.CommentSerializer
 
     def create(self, request, *args, **kwargs):
         if not self.request.user.is_authenticated:
