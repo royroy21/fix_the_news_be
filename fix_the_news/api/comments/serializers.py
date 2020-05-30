@@ -1,6 +1,6 @@
 from rest_framework import serializers
 
-from fix_the_news.api.users.serializers import UserReadOnlySerializer
+from fix_the_news.api.users import serializers as users_serializers
 from fix_the_news.comments import models
 
 
@@ -23,4 +23,8 @@ class CommentSerializer(serializers.ModelSerializer):
         )
 
     def get_serialized_user(self, obj):
-        return UserReadOnlySerializer(obj.user).data
+        return users_serializers\
+            .UserReadOnlySerializer(
+                obj.user,
+                context={'request': self.context['request']})\
+            .data
