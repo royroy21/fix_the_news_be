@@ -16,6 +16,7 @@ class CategoryReadOnlySerializer(serializers.ModelSerializer):
 
 class TopicReadOnlySerializer(serializers.ModelSerializer):
 
+    comments_count = serializers.SerializerMethodField()
     serialized_categories = serializers.SerializerMethodField()
     news_items_count = serializers.SerializerMethodField()
     top_news_items = serializers.SerializerMethodField()
@@ -24,6 +25,7 @@ class TopicReadOnlySerializer(serializers.ModelSerializer):
         model = models.Topic
         fields = (
             'id',
+            'comments_count',
             'date_created',
             'news_items_count',
             'serialized_categories',
@@ -32,6 +34,9 @@ class TopicReadOnlySerializer(serializers.ModelSerializer):
             'user',
         )
         read_only_fields = fields
+
+    def get_comments_count(self, obj):
+        return obj.comments.count()
 
     def get_news_items_count(self, obj):
         return {

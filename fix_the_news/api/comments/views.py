@@ -11,6 +11,7 @@ class CommentViewSet(CustomCreateRetrieveListViewSet):
     allowed_filters = [
         'category',
         'news_item',
+        'topic',
     ]
     pagination_class = CustomPageNumberPagination
     queryset = models.Comment.objects\

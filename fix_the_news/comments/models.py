@@ -18,6 +18,13 @@ class Comment(DateCreatedUpdatedMixin):
         on_delete=models.CASCADE,
         related_name='comments',
     )
+    topic = models.ForeignKey(
+        'topics.Topic',
+        blank=True,
+        null=True,
+        on_delete=models.CASCADE,
+        related_name='comments',
+    )
     text = models.TextField()
     user = models.ForeignKey(
         'users.User',

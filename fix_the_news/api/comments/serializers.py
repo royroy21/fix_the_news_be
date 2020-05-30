@@ -13,6 +13,7 @@ class CommentSerializer(serializers.ModelSerializer):
             'id',
             'comment',
             'news_item',
+            'topic',
             'serialized_user',
             'text',
             'user',
