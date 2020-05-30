@@ -12,6 +12,7 @@ class CommentSerializer(serializers.ModelSerializer):
         fields = (
             'id',
             'comment',
+            'date_created',
             'news_item',
             'topic',
             'serialized_user',
@@ -20,6 +21,8 @@ class CommentSerializer(serializers.ModelSerializer):
         )
         read_only_fields = (
             'id',
+            'date_created',
+            'serialized_user',
         )
 
     def get_serialized_user(self, obj):
