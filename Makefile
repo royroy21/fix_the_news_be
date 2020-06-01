@@ -33,7 +33,7 @@ help:
 	$(MAKE) usage
 
 manage:
-	@docker-compose run --rm ${OPTIONS} django python3 ${PYTHON_ARGS} manage.py ${ARGS} --settings=settings.local
+	@docker-compose run --rm ${OPTIONS} django python3 ${PYTHON_ARGS} manage.py ${ARGS}
 
 migrate:
 	$(MAKE) manage ARGS="migrate ${ARGS}"
