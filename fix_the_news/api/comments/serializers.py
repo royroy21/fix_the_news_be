@@ -5,6 +5,7 @@ from fix_the_news.comments import models
 
 
 class CommentSerializer(serializers.ModelSerializer):
+    comments_count = serializers.SerializerMethodField()
     serialized_user = serializers.SerializerMethodField()
 
     class Meta:
@@ -12,6 +13,7 @@ class CommentSerializer(serializers.ModelSerializer):
         fields = (
             'id',
             'comment',
+            'comments_count',
             'date_created',
             'news_item',
             'topic',
@@ -21,9 +23,13 @@ class CommentSerializer(serializers.ModelSerializer):
         )
         read_only_fields = (
             'id',
+            'comments_count',
             'date_created',
             'serialized_user',
         )
+
+    def get_comments_count(self, obj):
+        return obj.comments.count()
 
     def get_serialized_user(self, obj):
         return users_serializers\
