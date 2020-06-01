@@ -9,7 +9,7 @@ from fix_the_news.comments import models
 
 class CommentViewSet(CustomCreateRetrieveListViewSet):
     allowed_filters = [
-        'category',
+        'comment',
         'news_item',
         'topic',
     ]
