@@ -32,6 +32,7 @@ ALLOWED_HOSTS = []
 
 LOCAL_APPS = [
     'fix_the_news.comments',
+    'fix_the_news.likes',
     'fix_the_news.news_items',
     'fix_the_news.topics',
     'fix_the_news.users',
