@@ -13,6 +13,7 @@ logger = logging.getLogger(__name__)
 
 
 class NewsItemSerializer(serializers.ModelSerializer):
+    likes_count = serializers.SerializerMethodField()
     news_source = serializers.SerializerMethodField()
     serialized_category = serializers.SerializerMethodField()
     serialized_user = serializers.SerializerMethodField()
@@ -23,6 +24,7 @@ class NewsItemSerializer(serializers.ModelSerializer):
             'category',
             'date_created',
             'id',
+            'likes_count',
             'news_source',
             'serialized_category',
             'serialized_user',
@@ -34,9 +36,13 @@ class NewsItemSerializer(serializers.ModelSerializer):
         read_only_fields = (
             'id',
             'date_created',
+            'likes_count',
             'serialized_category',
             'serialized_user',
         )
+
+    def get_likes_count(self, obj):
+        return obj.likes.count()
 
     def get_news_source(self, obj):
         return obj.news_source.get_name()
