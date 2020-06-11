@@ -56,8 +56,7 @@ class NewsItemSerializer(serializers.ModelSerializer):
 
     def validate_url(self, url):
         service = NewsItemURLService()
-        parsed_url = service.parse(url)
-        error = service.validate(parsed_url)
+        parsed_url, error = service.parse_and_validate(url)
         if error:
             raise ValidationError(error)
         return parsed_url
