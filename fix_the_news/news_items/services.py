@@ -12,10 +12,25 @@ class NewsItemURLService:
     PREPEND_HTTP = 'http://'
     PREPEND_HTTPS = 'https://'
 
-    def parse(self, url):
+    def parse_and_validate(self, url):
+        """ Returns parsed url and validation error if error exists """
+        https_url = self.parse(url)
+        error = self.validate(https_url)
+        if error:
+            http_url = self.parse(url, force_http=True)
+            error = self.validate(http_url)
+            if error:
+                return url, error
+            return http_url, None
+        return https_url, None
+
+    def parse(self, url, force_http=False):
         if url.startswith(self.PREPEND_HTTP) \
                 or url.startswith(self.PREPEND_HTTPS):
             return url
+
+        if force_http:
+            return f"{self.PREPEND_HTTP}{url}"
 
         return f"{self.PREPEND_HTTPS}{url}"
 
