@@ -62,7 +62,9 @@ class TopicReadOnlySerializer(serializers.ModelSerializer):
         from fix_the_news.api.news_items.serializers import NewsItemSerializer
         return {
             key: NewsItemSerializer(
-                    obj.get_top_news_items(key), many=True).data
+                obj.get_top_news_items(key),
+                many=True,
+                context=self.context).data
             for key
             in models.Category.ALL_TYPE_CHOICES
         }
