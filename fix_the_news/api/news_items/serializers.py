@@ -1,3 +1,4 @@
+from django.contrib.auth.models import AnonymousUser
 from rest_framework import serializers
 from rest_framework.exceptions import ValidationError
 
@@ -8,6 +9,7 @@ from fix_the_news.news_items.services import NewsItemURLService
 
 
 class NewsItemSerializer(serializers.ModelSerializer):
+    like = serializers.SerializerMethodField()
     likes_count = serializers.SerializerMethodField()
     news_source = serializers.SerializerMethodField()
     serialized_category = serializers.SerializerMethodField()
@@ -19,6 +21,7 @@ class NewsItemSerializer(serializers.ModelSerializer):
             'category',
             'date_created',
             'id',
+            'like',
             'likes_count',
             'news_source',
             'serialized_category',
@@ -31,10 +34,24 @@ class NewsItemSerializer(serializers.ModelSerializer):
         read_only_fields = (
             'id',
             'date_created',
+            'like',
             'likes_count',
             'serialized_category',
             'serialized_user',
         )
+
+    def get_like(self, obj):
+        """
+        Returns like ID if user making the
+        request liked this news item
+        """
+        user = self.context["request"].user
+        if isinstance(user, AnonymousUser):
+            return None
+        query = obj.likes.filter(user=user)
+        if query.exists():
+            return query.first().id
+        return None
 
     def get_likes_count(self, obj):
         return obj.likes.count()
