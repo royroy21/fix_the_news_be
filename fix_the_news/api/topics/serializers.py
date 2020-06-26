@@ -29,6 +29,7 @@ class TopicReadOnlySerializer(serializers.ModelSerializer):
             'date_created',
             'news_items_count',
             'serialized_categories',
+            'slug',
             'title',
             'top_news_items',
             'user',

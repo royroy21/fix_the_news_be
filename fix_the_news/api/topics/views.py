@@ -6,6 +6,7 @@ from fix_the_news.topics import models
 
 
 class TopicViewSet(viewsets.ReadOnlyModelViewSet):
+    lookup_field = "slug"
     pagination_class = CustomPageNumberPagination
     serializer_class = serializers.TopicReadOnlySerializer
     queryset = models.Topic.objects\
