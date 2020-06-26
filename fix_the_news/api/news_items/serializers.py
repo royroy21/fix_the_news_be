@@ -14,6 +14,7 @@ class NewsItemSerializer(serializers.ModelSerializer):
     news_source = serializers.SerializerMethodField()
     serialized_category = serializers.SerializerMethodField()
     serialized_user = serializers.SerializerMethodField()
+    topic_slug = serializers.SerializerMethodField()
 
     class Meta:
         model = models.NewsItem
@@ -28,6 +29,7 @@ class NewsItemSerializer(serializers.ModelSerializer):
             'serialized_user',
             'title',
             'topic',
+            'topic_slug',
             'user',
             'url',
         )
@@ -38,6 +40,7 @@ class NewsItemSerializer(serializers.ModelSerializer):
             'likes_count',
             'serialized_category',
             'serialized_user',
+            'topic_slug',
         )
 
     def get_like(self, obj):
@@ -64,6 +67,9 @@ class NewsItemSerializer(serializers.ModelSerializer):
 
     def get_serialized_user(self, obj):
         return UserReadOnlySerializer(obj.user).data
+
+    def get_topic_slug(self, obj):
+        return obj.topic.slug
 
     def create(self, validated_data):
         news_source, _ = models.NewsSource.objects\
