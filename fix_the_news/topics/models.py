@@ -1,4 +1,6 @@
 from django.db import models
+from django.utils.text import slugify
+
 from fix_the_news.core.models import DateCreatedUpdatedMixin
 
 
@@ -38,6 +40,7 @@ class Category(DateCreatedUpdatedMixin):
 
 class Topic(DateCreatedUpdatedMixin):
     active = models.BooleanField(default=True)
+    slug = models.CharField(max_length=254, unique=True)
     title = models.CharField(max_length=254, unique=True)
     user = models.ForeignKey("users.User", on_delete=models.CASCADE)
 
@@ -68,3 +71,7 @@ class Topic(DateCreatedUpdatedMixin):
         return self.news_items\
             .filter(active=True, category__type=category)\
             .order_by("-date_created")[:amount]
+
+    def save(self, *args, **kwargs):
+        self.slug = slugify(self.title)
+        return super().save(*args, **kwargs)
