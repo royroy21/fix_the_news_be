@@ -27,7 +27,6 @@ class CurrentUserSerializer(DjoserUserSerializer):
             "last_name",
         )
         read_only_fields = (
-            settings.LOGIN_FIELD,
             "id",
         )
 
