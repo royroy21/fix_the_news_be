@@ -21,7 +21,12 @@ from django.urls import path, include
 from fix_the_news.api.routes import api_router
 
 
+def trigger_error(request):
+    division_by_zero = 1 / 0
+
+
 urlpatterns = [
+    path("api/sentry-debug/", trigger_error),
     path("api/admin/", admin.site.urls),
     path("api/authentication/", include("djoser.urls.base")),
     path("api/authentication/", include("djoser.urls.authtoken")),
