@@ -107,4 +107,9 @@ class NewsItemSerializer(serializers.ModelSerializer):
         parsed_url, error = service.parse_and_validate(url)
         if error:
             raise ValidationError(error)
+
+        news_items_with_url = models.NewsItem.objects.filter(url=parsed_url)
+        if news_items_with_url.exists():
+            raise ValidationError("News item with this URL already exists")
+
         return parsed_url
