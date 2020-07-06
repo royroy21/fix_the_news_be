@@ -196,7 +196,7 @@ LOGGING = {
     },
 }
 
-MEDIA_ROOT = os.path.join(BASE_DIR, '../../media')
+MEDIA_ROOT = os.path.join(BASE_DIR, "media")
 MEDIA_URL = "/media/"
 
 # How many news items a user can add within 24 hours
