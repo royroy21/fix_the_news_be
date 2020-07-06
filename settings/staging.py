@@ -38,6 +38,18 @@ DATABASES = {
     }
 }
 
-# TODO - media to be stored on s3 bucket ?
+# static files
 STATIC_ROOT = '/app/static'
-MEDIA_ROOT = '/app/media'
+
+# AWS
+AWS_ACCESS_KEY_ID = os.environ["AWS_ACCESS_KEY_ID"]
+AWS_SECRET_ACCESS_KEY = os.environ["AWS_SECRET_ACCESS_KEY"]
+AWS_S3_REGION_NAME = os.environ["AWS_S3_REGION_NAME"]
+AWS_S3_DOMAIN = "s3.amazonaws.com"
+AWS_MEDIA_BUCKET_NAME = os.environ["AWS_MEDIA_BUCKET_NAME"]
+AWS_S3_CUSTOM_DOMAIN = f"{AWS_MEDIA_BUCKET_NAME}.{AWS_S3_DOMAIN}"
+AWS_S3_OBJECT_PARAMETERS = {
+    "CacheControl": "max-age=86400",
+}
+
+DEFAULT_FILE_STORAGE = "fix_the_news.custom_storage.S3MediaStorage"

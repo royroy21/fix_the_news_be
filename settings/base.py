@@ -44,6 +44,7 @@ THIRD_PARTY_APPS = [
     'djoser',
     'rest_framework',
     'rest_framework.authtoken',
+    'storages',
 ]
 
 INSTALLED_APPS = [
