@@ -8,7 +8,9 @@
 	migrations \
 	shell \
 	test \
+	tests \
 	usage \
+	workers \
 
 usage:
 	@echo "Available commands:"
@@ -20,8 +22,9 @@ usage:
 	@echo "migrations       Create Django migrations"
 	@echo "shell            Run Django command line"
 	@echo "test             Run Django tests"
-	@echo "tests             Run Django tests"
+	@echo "tests            Run Django tests"
 	@echo "usage            Display available commands"
+	@echo "workers          Start celery workers"
 
 chown:
 	@docker-compose run --rm django chown -R "`id -u`:`id -u`" "/code/${ARGS}"
@@ -49,3 +52,6 @@ test:
 
 tests:
 	$(MAKE) test
+
+workers:
+	@docker-compose run --rm django celery -A fix_the_news worker -l info -Q create_avatar_thumbnail,celery
