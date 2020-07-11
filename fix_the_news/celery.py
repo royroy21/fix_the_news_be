@@ -16,5 +16,11 @@ app = Celery("fix_the_news")
 #   should have a `CELERY_` prefix.
 app.config_from_object("django.conf:settings", namespace="CELERY")
 
+app.conf.task_routes = {
+    "fix_the_news.users.tasks.create_avatar_thumbnail": {
+        "queue": "create_avatar_thumbnail",
+    },
+}
+
 # Load task modules from all registered Django app configs.
 app.autodiscover_tasks()
