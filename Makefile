@@ -54,4 +54,4 @@ tests:
 	$(MAKE) test
 
 workers:
-	@docker-compose run --rm django celery -A fix_the_news worker -l info -Q create_avatar_thumbnail,celery
+	@docker-compose run --rm django celery -A fix_the_news worker -l info -Q celery
