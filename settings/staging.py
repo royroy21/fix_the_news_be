@@ -13,8 +13,7 @@ sentry_sdk.init(
         CeleryIntegration(),
         DjangoIntegration(),
     ],
-    # If you wish to associate users to errors (assuming you are using
-    # django.contrib.auth) you may enable sending PII data.
+    # Associates users to errors
     send_default_pii=True
 )
 
