@@ -9,7 +9,7 @@ from rest_framework.exceptions import ValidationError
 from fix_the_news.api.topics.serializers import CategoryReadOnlySerializer
 from fix_the_news.api.users.serializers import UserReadOnlySerializer
 from fix_the_news.news_items import models
-from fix_the_news.news_items.services import NewsItemURLService
+from fix_the_news.news_items.services.url_service import NewsItemURLService
 
 
 logger = logging.getLogger(__name__)

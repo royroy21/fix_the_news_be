@@ -1,4 +1,5 @@
 import sentry_sdk
+from sentry_sdk.integrations.celery import CeleryIntegration
 from sentry_sdk.integrations.django import DjangoIntegration
 
 from .base import *
@@ -8,10 +9,11 @@ sentry_org = os.environ['SENTRY_ORGANISATION']
 sentry_project = os.environ['SENTRY_PROJECT']
 sentry_sdk.init(
     dsn=f"https://{sentry_key}@{sentry_org}.ingest.sentry.io/{sentry_project}",
-    integrations=[DjangoIntegration()],
-
-    # If you wish to associate users to errors (assuming you are using
-    # django.contrib.auth) you may enable sending PII data.
+    integrations=[
+        CeleryIntegration(),
+        DjangoIntegration(),
+    ],
+    # Associates users to errors
     send_default_pii=True
 )
 
@@ -54,3 +56,5 @@ AWS_S3_OBJECT_PARAMETERS = {
 }
 
 DEFAULT_FILE_STORAGE = "fix_the_news.custom_storage.S3MediaStorage"
+
+CELERY_BROKER_URL = os.environ["CELERY_BROKER_URL"]

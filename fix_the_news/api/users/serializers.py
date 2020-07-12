@@ -1,11 +1,14 @@
 from django.contrib.auth import get_user_model
 from django.conf import settings
+from django.db.transaction import on_commit
 from django.utils.translation import ugettext_lazy as _
 from djoser.serializers import UserSerializer as DjoserUserSerializer
 from djoser.serializers import UserCreateSerializer as \
     DjoserUserCreateSerializer
 from rest_framework import serializers
 from rest_framework.serializers import CharField
+
+from fix_the_news.users.tasks import create_avatar_thumbnail
 
 User = get_user_model()
 
@@ -22,13 +25,21 @@ class CurrentUserSerializer(DjoserUserSerializer):
         fields = tuple(User.REQUIRED_FIELDS) + (
             settings.LOGIN_FIELD,
             "avatar",
+            "avatar_thumbnail_small",
             "id",
             "first_name",
             "last_name",
         )
         read_only_fields = (
+            "avatar_thumbnail_small",
             "id",
         )
+
+    def save(self, **kwargs):
+        user = super().save(**kwargs)
+        if "avatar" in self.validated_data:
+            on_commit(lambda: create_avatar_thumbnail.delay(user.id))
+        return user
 
 
 class CreatePasswordRetypeSerializer(DjoserUserCreateSerializer):
@@ -60,6 +71,12 @@ class CreatePasswordRetypeSerializer(DjoserUserCreateSerializer):
             self.fail('password_mismatch')
         return attrs
 
+    def save(self, **kwargs):
+        user = super().save(**kwargs)
+        if "avatar" in self.validated_data:
+            on_commit(lambda: create_avatar_thumbnail.delay(user.id))
+        return user
+
 
 class UserReadOnlySerializer(serializers.ModelSerializer):
 
@@ -68,6 +85,7 @@ class UserReadOnlySerializer(serializers.ModelSerializer):
         fields = tuple(User.REQUIRED_FIELDS) + (
             settings.LOGIN_FIELD,
             "avatar",
+            "avatar_thumbnail_small",
             "id",
             "first_name",
             "last_name",

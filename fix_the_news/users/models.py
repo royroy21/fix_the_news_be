@@ -62,6 +62,8 @@ class User(auth_models.AbstractBaseUser, auth_models.PermissionsMixin):
     first_name = models.CharField(_('first_name'), max_length=254)
     last_name = models.CharField(_('last_name'), max_length=254)
     avatar = models.ImageField(upload_to="avatars", blank=True, null=True)
+    avatar_thumbnail_small = \
+        models.ImageField(upload_to="avatars", blank=True, null=True)
 
     is_staff = models.BooleanField(default=False)
     is_superuser = models.BooleanField(default=False)
