@@ -1,5 +1,3 @@
-import logging
-
 from django.contrib.auth import get_user_model
 from django.conf import settings
 from django.db.transaction import on_commit
@@ -12,7 +10,6 @@ from rest_framework.serializers import CharField
 
 from fix_the_news.users.tasks import create_avatar_thumbnail
 
-logger = logging.getLogger(__name__)
 User = get_user_model()
 
 
@@ -40,12 +37,8 @@ class CurrentUserSerializer(DjoserUserSerializer):
 
     def save(self, **kwargs):
         user = super().save(**kwargs)
-        try:
-            if "avatar" in self.validated_data:
-                on_commit(lambda: create_avatar_thumbnail.delay(user.id))
-        except Exception as error:
-            logger.error('RABBIT IMAGE UPLOAD ERROR %s', error)
-
+        if "avatar" in self.validated_data:
+            on_commit(lambda: create_avatar_thumbnail.delay(user.id))
         return user
 
 
