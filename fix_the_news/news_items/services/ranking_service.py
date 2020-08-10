@@ -1,4 +1,6 @@
-from datetime import datetime, timedelta
+from datetime import timedelta
+
+from django.utils import timezone
 
 from fix_the_news.likes import models as likes_models
 from fix_the_news.views import models as views_models
@@ -39,7 +41,7 @@ class NewsItemRankingService:
     VIEWS_MULTIPLIER = 1
 
     def get_total_score(self, news_item):
-        now = datetime.now()
+        now = timezone.now()
         first_days_start = now - timedelta(days=2)
         first_days_score = self.calculate_score_for_time_period(
             news_item=news_item,
