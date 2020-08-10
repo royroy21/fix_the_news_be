@@ -9,6 +9,7 @@ from rest_framework.test import APIClient
 from fix_the_news.news_items import models
 from fix_the_news.topics import models as topics_models
 from fix_the_news.users import models as users_models
+from fix_the_news.views import models as views_models
 
 
 class TestNewsItemViewSet(TestCase):
@@ -97,12 +98,13 @@ class TestNewsItemViewSet(TestCase):
 
         # first view
         response = self.unauthenticated_client.post(endpoint)
-        self.assertTrue(response.status_code, status.HTTP_200_OK)
-        news_item.refresh_from_db()
-        self.assertEqual(news_item.views, 1)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        query = views_models.View.objects.filter(news_item=news_item)
+        self.assertEqual(query.count(), 1)
 
         # second view
         response = self.unauthenticated_client.post(endpoint)
-        self.assertTrue(response.status_code, status.HTTP_200_OK)
-        news_item.refresh_from_db()
-        self.assertEqual(news_item.views, 2)
+        self.assertEqual(
+            response.status_code,
+            status.HTTP_422_UNPROCESSABLE_ENTITY,
+        )
