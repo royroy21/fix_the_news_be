@@ -1,8 +1,9 @@
-from datetime import datetime, timedelta
+from datetime import timedelta
 import logging
 
 from django.conf import settings
 from django.contrib.auth.models import AnonymousUser
+from django.utils import timezone
 from rest_framework import serializers
 from rest_framework.exceptions import ValidationError
 
@@ -89,7 +90,7 @@ class NewsItemSerializer(serializers.ModelSerializer):
         return super().validate(attrs)
 
     def check_news_items_limit(self, user):
-        twenty_four_hours_ago = datetime.now() - timedelta(days=1)
+        twenty_four_hours_ago = timezone.now() - timedelta(days=1)
         news_items_created = models.NewsItem.objects.filter(
             user=user,
             date_created__gte=twenty_four_hours_ago,
