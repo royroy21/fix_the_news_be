@@ -3,6 +3,7 @@ from unittest.mock import patch
 from django_dynamic_fixture import G
 from django.test import TestCase
 from django.urls import reverse
+from rest_framework import status
 from rest_framework.test import APIClient
 
 from fix_the_news.news_items import models
@@ -89,3 +90,19 @@ class TestNewsItemViewSet(TestCase):
         news_item_exists = \
             models.NewsItem.objects.filter(title=data["title"]).exists()
         self.assertFalse(news_item_exists)
+
+    def test_add_view(self):
+        news_item = G(models.NewsItem, views=0)
+        endpoint = reverse('newsitem-add-view', kwargs={'pk': news_item.id})
+
+        # first view
+        response = self.unauthenticated_client.post(endpoint)
+        self.assertTrue(response.status_code, status.HTTP_200_OK)
+        news_item.refresh_from_db()
+        self.assertEqual(news_item.views, 1)
+
+        # second view
+        response = self.unauthenticated_client.post(endpoint)
+        self.assertTrue(response.status_code, status.HTTP_200_OK)
+        news_item.refresh_from_db()
+        self.assertEqual(news_item.views, 2)
