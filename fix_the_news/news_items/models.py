@@ -43,6 +43,17 @@ class NewsItem(DateCreatedUpdatedMixin):
         self.score_data = score
         self.save()
 
+    def get_highest_competing_score(self):
+        """
+        Gets highest competing score for news items
+        for the same topic in the same category
+        """
+        return self.topic\
+            .news_items.filter(category=self.category)\
+            .order_by('-score')\
+            .first()\
+            .score
+
 
 class NewsSourceManager(models.Manager):
     def get_or_create(self, *args, **kwargs):
