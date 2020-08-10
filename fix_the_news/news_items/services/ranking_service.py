@@ -73,7 +73,7 @@ class NewsItemRankingService:
         the_rest_score = self.calculate_score_for_time_period(
             news_item=news_item,
             multiplier=1,
-            start_date=third_week_start,
+            end_date=third_week_start,
         )
 
         total_score = (
@@ -93,7 +93,7 @@ class NewsItemRankingService:
         }
 
     def calculate_score_for_time_period(
-            self, news_item, multiplier, start_date, end_date=None):
+            self, news_item, multiplier, start_date=None, end_date=None):
         likes_score = self.calculate_score_for_model(
             model=likes_models.Like,
             news_item=news_item,
@@ -108,26 +108,21 @@ class NewsItemRankingService:
             start_date=start_date,
             end_date=end_date,
         )
-
-        score_data = {
+        return {
             'likes_score': likes_score,
             'views_score': views_score,
             'multiplier': multiplier,
+            'total_score': (likes_score + views_score) * multiplier,
         }
-        if likes_score or views_score:
-            score_data['total_score'] = \
-                (likes_score + views_score) * multiplier
-            return score_data
-        else:
-            score_data['total_score'] = 0
-            return score_data
 
     def calculate_score_for_model(
-            self, model, news_item, multiplier, start_date, end_date=None):
+            self, model, news_item, multiplier,
+            start_date=None, end_date=None):
         args = {
             'news_item': news_item,
-            'date_created__gte': start_date,
         }
+        if start_date:
+            args['date_created__gte'] = start_date
         if end_date:
             args['date_created__lte'] = end_date
 
