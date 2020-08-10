@@ -2,6 +2,8 @@ from urllib.parse import urlparse
 
 from django.db import models
 from fix_the_news.core.models import DateCreatedUpdatedMixin
+from fix_the_news.news_items.services.ranking_service import \
+    NewsItemRankingService
 
 
 class NewsItem(DateCreatedUpdatedMixin):
@@ -25,6 +27,10 @@ class NewsItem(DateCreatedUpdatedMixin):
     def __str__(self):
         return f"{self.title} ({self.topic})"
 
+    class Meta:
+        indexes = [
+            models.Index(fields=['score']),
+        ]
 
 class NewsSourceManager(models.Manager):
     def get_or_create(self, *args, **kwargs):
