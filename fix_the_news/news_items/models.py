@@ -38,9 +38,8 @@ class NewsItem(DateCreatedUpdatedMixin):
         return NewsItemRankingService().get_total_score(self)
 
     def save_score(self):
-        score = self.get_score()
-        self.score = score['total_score']
-        self.score_data = score
+        self.score_data = self.get_score()
+        self.score = self.score_data['total_score']
         self.save()
 
     def get_highest_competing_score(self):
