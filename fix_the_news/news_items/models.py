@@ -15,7 +15,6 @@ class NewsItem(DateCreatedUpdatedMixin):
     user = models.ForeignKey("users.User", on_delete=models.CASCADE)
     url = models.CharField(max_length=254)
     category = models.ForeignKey("topics.Category", on_delete=models.CASCADE)
-    views = models.PositiveIntegerField(default=0)
     score = models.PositiveIntegerField(default=0)
     news_source = models.ForeignKey(
         "news_items.NewsSource",
