@@ -108,20 +108,19 @@ class NewsItemRankingService:
             start_date=start_date,
             end_date=end_date,
         )
+
+        score_data = {
+            'likes_score': likes_score,
+            'views_score': views_score,
+            'multiplier': multiplier,
+        }
         if likes_score or views_score:
-            return {
-                'likes_score': likes_score,
-                'views_score': views_score,
-                'multiplier': multiplier,
-                'total_score': (likes_score + views_score) * multiplier,
-            }
+            score_data['total_score'] = \
+                (likes_score + views_score) * multiplier
+            return score_data
         else:
-            return {
-                'likes_score': likes_score,
-                'views_score': views_score,
-                'multiplier': multiplier,
-                'total_score': 0,
-            }
+            score_data['total_score'] = 0
+            return score_data
 
     def calculate_score_for_model(
             self, model, news_item, multiplier, start_date, end_date=None):
