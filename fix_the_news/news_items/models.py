@@ -1,6 +1,7 @@
 from urllib.parse import urlparse
 
 from django.db import models
+from django.contrib.postgres import fields as postgres_fields
 from fix_the_news.core.models import DateCreatedUpdatedMixin
 from fix_the_news.news_items.services.ranking_service import \
     NewsItemRankingService
@@ -18,6 +19,7 @@ class NewsItem(DateCreatedUpdatedMixin):
     url = models.CharField(max_length=254)
     category = models.ForeignKey("topics.Category", on_delete=models.CASCADE)
     score = models.PositiveIntegerField(default=0)
+    score_data = postgres_fields.JSONField(default=dict)
     news_source = models.ForeignKey(
         "news_items.NewsSource",
         on_delete=models.CASCADE,
@@ -31,6 +33,16 @@ class NewsItem(DateCreatedUpdatedMixin):
         indexes = [
             models.Index(fields=['score']),
         ]
+
+    def get_score(self):
+        return NewsItemRankingService().get_total_score(self)
+
+    def save_score(self):
+        score = self.get_score()
+        self.score = score['total_score']
+        self.score_data = score
+        self.save()
+
 
 class NewsSourceManager(models.Manager):
     def get_or_create(self, *args, **kwargs):
