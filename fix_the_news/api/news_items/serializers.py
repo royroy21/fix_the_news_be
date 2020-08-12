@@ -85,8 +85,8 @@ class NewsItemSerializer(serializers.ModelSerializer):
             .get_or_create(hostname=validated_data["url"])
         validated_data["news_source"] = news_source
 
-        # New news items are assigned a top score to get it maximum
-        # exposure.A task later on will assign it the correct score
+        # New news items are assigned a top score for it to get maximum
+        # exposure. A task later on will assign it the correct score
         service = scoring_service.NewsItemScoringService()
         validated_data["score"] = service.get_highest_score(
             topic=validated_data["topic"],
