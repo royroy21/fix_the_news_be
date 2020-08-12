@@ -1,7 +1,4 @@
-from datetime import timedelta
-
-from django.utils import timezone
-
+from fix_the_news.core.services.scoring_service import BaseScoringService
 from fix_the_news.likes import models as likes_models
 from fix_the_news.views import models as views_models
 
@@ -15,7 +12,7 @@ from fix_the_news.views import models as views_models
 # 4) Need to decide on a how to not score really old news items than haven't
 #    any activity for a while. This is important - we need to keep the update
 #    task to run as fast as possible.
-class NewsItemScoringService:
+class NewsItemScoringService(BaseScoringService):
     """
     Scoring is based upon how many likes and views a news item collects.
 
@@ -25,9 +22,6 @@ class NewsItemScoringService:
     second week. This is so news items will score less over time unless
     they keep acquiring more likes and views.
     """
-
-    FIRST_DAYS = 2  # how many days count as first days
-
     FIRST_DAYS_MULTIPLIER = 10
     FIRST_WEEK_MULTIPLIER = 5
     SECOND_WEEK_MULTIPLIER = 3
@@ -36,30 +30,31 @@ class NewsItemScoringService:
     LIKES_MULTIPLIER = 4
     VIEWS_MULTIPLIER = 1
 
-    def get_total_score(self, news_item):
-        now = timezone.now()
-        first_days_start = now - timedelta(days=2)
+    def get_score(self, news_item):
+        dates = self.get_dates()
+        now = dates['now']
+        first_days_start = dates['first_days_start']
         first_days_score = self.calculate_score_for_time_period(
             news_item=news_item,
             multiplier=self.FIRST_DAYS_MULTIPLIER,
             start_date=first_days_start,
             end_date=now,
         )
-        first_week_start = first_days_start - timedelta(days=5)
+        first_week_start = dates['first_week_start']
         first_week_score = self.calculate_score_for_time_period(
             news_item=news_item,
             multiplier=self.FIRST_WEEK_MULTIPLIER,
             start_date=first_week_start,
             end_date=first_days_start,
         )
-        second_week_start = first_week_start - timedelta(days=7)
+        second_week_start = dates['second_week_start']
         second_week_score = self.calculate_score_for_time_period(
             news_item=news_item,
             multiplier=self.SECOND_WEEK_MULTIPLIER,
             start_date=second_week_start,
             end_date=first_week_start,
         )
-        third_week_start = second_week_start - timedelta(days=7)
+        third_week_start = dates['third_week_start']
         third_week_score = self.calculate_score_for_time_period(
             news_item=news_item,
             multiplier=self.THIRD_WEEK_MULTIPLIER,
