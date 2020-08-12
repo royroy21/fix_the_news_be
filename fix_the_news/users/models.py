@@ -71,6 +71,9 @@ class User(auth_models.AbstractBaseUser, auth_models.PermissionsMixin):
     last_login = models.DateTimeField(null=True, blank=True)
     date_joined = models.DateTimeField(auto_now_add=True)
 
+    has_viewed_welcome_communication = models.BooleanField(default=False)
+    has_viewed_daily_communication = models.BooleanField(default=False)
+
     USERNAME_FIELD = "email"
     EMAIL_FIELD = "email"
     REQUIRED_FIELDS = []
