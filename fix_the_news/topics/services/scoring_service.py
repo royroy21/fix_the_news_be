@@ -54,6 +54,6 @@ class TopicScoringService(BaseScoringService):
         """ Returns highest topic score """
         highest_scored_topic = models.Topic.objects.order_by('-score').first()
         if not highest_scored_topic:
-            return 0
+            return 0 + self.HIGHEST_SCORE_ADDITION
         else:
-            return highest_scored_topic.score
+            return highest_scored_topic.score + self.HIGHEST_SCORE_ADDITION

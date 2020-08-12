@@ -133,6 +133,6 @@ class NewsItemScoringService(BaseScoringService):
             .order_by('-score')\
             .first()
         if not top_scored_news_item:
-            return 0
+            return 0 + self.HIGHEST_SCORE_ADDITION
         else:
-            return top_scored_news_item.score
+            return top_scored_news_item.score + self.HIGHEST_SCORE_ADDITION

@@ -6,6 +6,13 @@ from django.utils import timezone
 class BaseScoringService:
 
     FIRST_DAYS = 2  # how many days count as first days
+    HIGHEST_SCORE_ADDITION = 10  # added to the result of get_highest_score
+
+    def get_score(self, *args, **kwargs):
+        raise NotImplementedError
+
+    def get_highest_score(self, *args, **kwargs):
+        raise NotImplementedError
 
     def get_dates(self):
         now = timezone.now()
