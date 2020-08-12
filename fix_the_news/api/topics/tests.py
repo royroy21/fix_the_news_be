@@ -19,7 +19,6 @@ class TestTopicViewSet(TestCase):
             title=self.topic_title,
             slug=slugify(self.topic_title),
         )
-        self.topic.create_missing_categories()
 
     def test_get_topic_by_slug(self):
         endpoint = reverse("topic-detail", kwargs={"slug": self.topic.slug})
