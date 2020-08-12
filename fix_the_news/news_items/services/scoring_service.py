@@ -17,16 +17,12 @@ from fix_the_news.views import models as views_models
 #    task to run as fast as possible.
 class NewsItemScoringService:
     """
-    This scores a news item by calculating a score for the first few days,
-    the first week, second week, third week and finally the rest of time it
-    has existed.
-
     Scoring is based upon how many likes and views a news item collects.
 
     Scoring is weighted so that likes and views are worth more the earlier
     they are created. For example likes and views in the first week would
     be scored using a much higher multiplier in the first week than the
-    forth week. This is so news items will score less over time unless
+    second week. This is so news items will score less over time unless
     they keep acquiring more likes and views.
     """
 
