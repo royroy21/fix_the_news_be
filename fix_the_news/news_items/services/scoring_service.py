@@ -9,9 +9,9 @@ class NewsItemScoringService(BaseScoringService):
 
     Scoring is weighted so that likes and views are worth more the earlier
     they are created. For example likes and views in the first week would
-    be scored using a much higher multiplier in the first week than the
-    second week. This is so news items will score less over time unless
-    they keep acquiring more likes and views.
+    be scored using a much higher multiplier than the second week. This is
+    so news items will score less over time unless they keep acquiring more
+    likes and views.
     """
     FIRST_DAYS_MULTIPLIER = 10
     FIRST_WEEK_MULTIPLIER = 5
