@@ -2,6 +2,7 @@ from django.db import models
 from django.utils.text import slugify
 
 from fix_the_news.core.models import DateCreatedUpdatedMixin
+from fix_the_news.topics.services import scoring_service
 
 
 class Category(DateCreatedUpdatedMixin):
@@ -74,3 +75,10 @@ class Topic(DateCreatedUpdatedMixin):
     def save(self, *args, **kwargs):
         self.slug = slugify(self.title)
         return super().save(*args, **kwargs)
+
+    def get_score(self):
+        return scoring_service.TopicScoringService().get_score(self)
+
+    def save_score(self):
+        self.score = self.get_score()
+        self.save()
