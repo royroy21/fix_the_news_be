@@ -20,7 +20,7 @@ class TestNewsItemScoringService(TestCase):
             news_item=news_item,
             date_created=timezone.now() - timedelta(days=1),
         )
-        score = self.service.get_total_score(news_item)
+        score = self.service.get_score(news_item)
 
         self.assertEqual(score['first_week_score']['total_score'], 0)
         self.assertEqual(score['second_week_score']['total_score'], 0)
@@ -44,7 +44,7 @@ class TestNewsItemScoringService(TestCase):
             news_item=news_item,
             date_created=timezone.now() - timedelta(days=10),
         )
-        score = self.service.get_total_score(news_item)
+        score = self.service.get_score(news_item)
 
         self.assertEqual(score['first_days_score']['total_score'], 0)
         self.assertEqual(score['first_week_score']['total_score'], 0)
@@ -68,7 +68,7 @@ class TestNewsItemScoringService(TestCase):
             news_item=news_item,
             date_created=timezone.now() - timedelta(days=60),
         )
-        score = self.service.get_total_score(news_item)
+        score = self.service.get_score(news_item)
 
         self.assertEqual(score['first_days_score']['total_score'], 0)
         self.assertEqual(score['first_week_score']['total_score'], 0)

@@ -34,7 +34,7 @@ class NewsItem(DateCreatedUpdatedMixin):
         ]
 
     def get_score(self):
-        return scoring_service.NewsItemScoringService().get_total_score(self)
+        return scoring_service.NewsItemScoringService().get_score(self)
 
     def save_score(self):
         self.score_data = self.get_score()
