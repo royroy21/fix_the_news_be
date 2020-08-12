@@ -3,8 +3,7 @@ from urllib.parse import urlparse
 from django.db import models
 from django.contrib.postgres import fields as postgres_fields
 from fix_the_news.core.models import DateCreatedUpdatedMixin
-from fix_the_news.news_items.services.ranking_service import \
-    NewsItemRankingService
+from fix_the_news.news_items.services import scoring_service
 
 
 class NewsItem(DateCreatedUpdatedMixin):
@@ -35,7 +34,7 @@ class NewsItem(DateCreatedUpdatedMixin):
         ]
 
     def get_score(self):
-        return NewsItemRankingService().get_total_score(self)
+        return scoring_service.NewsItemScoringService().get_total_score(self)
 
     def save_score(self):
         self.score_data = self.get_score()

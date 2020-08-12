@@ -6,13 +6,12 @@ from django.utils import timezone
 
 from fix_the_news.news_items import models
 from fix_the_news.likes import models as likes_models
-from fix_the_news.news_items.services.ranking_service import \
-    NewsItemRankingService
+from fix_the_news.news_items.services import scoring_service
 
 
-class TestNewsItemRankingService(TestCase):
+class TestNewsItemScoringService(TestCase):
 
-    service = NewsItemRankingService()
+    service = scoring_service.NewsItemScoringService()
 
     def test_get_total_score_for_first_day(self):
         news_item = G(models.NewsItem)

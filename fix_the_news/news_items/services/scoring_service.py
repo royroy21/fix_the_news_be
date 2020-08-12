@@ -15,9 +15,9 @@ from fix_the_news.views import models as views_models
 # 4) Need to decide on a how to not score really old news items than haven't
 #    any activity for a while. This is important - we need to keep the update
 #    task to run as fast as possible.
-class NewsItemRankingService:
+class NewsItemScoringService:
     """
-    This ranks a news item by calculating a score for the first few days,
+    This scores a news item by calculating a score for the first few days,
     the first week, second week, third week and finally the rest of time it
     has existed.
 
