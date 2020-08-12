@@ -127,3 +127,17 @@ class NewsItemScoringService:
             return query.count() * multiplier
         else:
             return 0
+
+    def get_highest_score(self, topic, category):
+        """
+        Gets highest score for news items of
+        the same topic in the same category
+        """
+        top_scored_news_item = topic\
+            .news_items.filter(category=category)\
+            .order_by('-score')\
+            .first()
+        if not top_scored_news_item:
+            return 0
+        else:
+            return top_scored_news_item.score
