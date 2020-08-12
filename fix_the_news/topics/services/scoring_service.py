@@ -3,6 +3,7 @@ from django.db.models import Sum
 from fix_the_news.core.services.scoring_service import BaseScoringService
 from fix_the_news.comments import models as comments_models
 from fix_the_news.news_items import models as news_items_models
+from fix_the_news.topics import models
 
 
 class TopicScoringService(BaseScoringService):
@@ -48,3 +49,11 @@ class TopicScoringService(BaseScoringService):
             first_week_score = 0
 
         return first_days_score + first_week_score
+
+    def get_highest_score(self):
+        """ Returns highest topic score """
+        highest_scored_topic = models.Topic.objects.order_by('-score').first()
+        if not highest_scored_topic:
+            return 0
+        else:
+            return highest_scored_topic.score
