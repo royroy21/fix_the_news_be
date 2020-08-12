@@ -41,6 +41,10 @@ class Category(DateCreatedUpdatedMixin):
 
 class Topic(DateCreatedUpdatedMixin):
     active = models.BooleanField(default=True)
+    # If True this moves topic above all
+    # other topics regardless of score
+    priority = models.BooleanField(default=False)
+    score = models.PositiveIntegerField(default=0)
     slug = models.CharField(max_length=254, unique=True)
     title = models.CharField(max_length=254, unique=True)
     user = models.ForeignKey("users.User", on_delete=models.CASCADE)
