@@ -21,11 +21,13 @@ class TopicAdmin(admin.ModelAdmin):
     change_form_template = 'admin/topics/change_form.html'
 
     def response_change(self, request, obj):
-        if "_top_rated" in request.POST:
+        if '_top_rated' in request.POST:
             from fix_the_news.topics.services import scoring_service
             obj.score = \
                 scoring_service.TopicScoringService().get_highest_score()
             obj.save()
+        if '_calculate_score' in request.POST:
+            obj.save_score()
         return super().response_change(request, obj)
 
     ordering = (
