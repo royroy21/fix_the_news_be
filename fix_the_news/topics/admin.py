@@ -4,6 +4,15 @@ from fix_the_news.topics import models
 
 
 class CategoryAdmin(admin.ModelAdmin):
+    list_display = (
+        "type",
+        "title",
+        "topic",
+        "user",
+    )
+    list_filter = (
+        "topic__title",
+    )
     ordering = (
         "date_created",
     )
@@ -30,11 +39,24 @@ class TopicAdmin(admin.ModelAdmin):
             obj.save_score()
         return super().response_change(request, obj)
 
-    ordering = (
+    list_display = (
+        "title",
+        "user",
+        "score",
+        "priority",
         "date_created",
+    )
+    list_filter = (
+        "priority",
+    )
+    ordering = (
+        "-priority",
+        "-score",
+        "-date_created",
     )
     search_fields = (
         "title",
+        "title__startswith",
         "user__email",
         "user__first_name",
         "user__last_name",
