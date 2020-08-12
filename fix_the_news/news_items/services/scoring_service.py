@@ -3,15 +3,6 @@ from fix_the_news.likes import models as likes_models
 from fix_the_news.views import models as views_models
 
 
-# TODO -
-# 1) Need a way to have newly created news items have a higher score
-#    than any others in it's first few hours so it has a chance to be seen by
-#    users.
-# 2) Will need some kind of task to remove this generous first created score.
-# 3) Need a rabbit task to run every few hours to update scores
-# 4) Need to decide on a how to not score really old news items than haven't
-#    any activity for a while. This is important - we need to keep the update
-#    task to run as fast as possible.
 class NewsItemScoringService(BaseScoringService):
     """
     Scoring is based upon how many likes and views a news item collects.
