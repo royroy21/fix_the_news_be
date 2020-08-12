@@ -30,8 +30,8 @@ class TopicScoringService(BaseScoringService):
         dates = self.get_dates()
         first_days = comments_models.Comment.objects.filter(
             topic=topic,
-            start_date=dates['first_days_start'],
-            end_date=dates['now'],
+            date_created__gte=dates['first_days_start'],
+            date_created__lte=dates['now'],
         ).count()
         if first_days:
             first_days_score = first_days * self.FIRST_DAYS_MULTIPLIER
@@ -40,8 +40,8 @@ class TopicScoringService(BaseScoringService):
 
         first_week = comments_models.Comment.objects.filter(
             topic=topic,
-            start_date=dates['first_week_start'],
-            end_date=dates['first_days_start'],
+            date_created__gte=dates['first_week_start'],
+            date_created__lte=dates['first_days_start']
         ).count()
         if first_week:
             first_week_score = first_week * self.FIRST_WEEK_MULTIPLIER
