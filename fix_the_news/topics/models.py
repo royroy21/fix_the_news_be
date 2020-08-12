@@ -2,7 +2,6 @@ from django.db import models
 from django.utils.text import slugify
 
 from fix_the_news.core.models import DateCreatedUpdatedMixin
-from fix_the_news.topics.services import scoring_service
 
 
 class Category(DateCreatedUpdatedMixin):
@@ -81,6 +80,7 @@ class Topic(DateCreatedUpdatedMixin):
         return super().save(*args, **kwargs)
 
     def get_score(self):
+        from fix_the_news.topics.services import scoring_service
         return scoring_service.TopicScoringService().get_score(self)
 
     def save_score(self):
