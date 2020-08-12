@@ -73,7 +73,9 @@ ROOT_URLCONF = 'fix_the_news.core.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [
+            os.path.join(BASE_DIR, 'fix_the_news/templates'),
+        ],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
