@@ -69,7 +69,7 @@ class Topic(DateCreatedUpdatedMixin):
     def get_top_news_items(self, category, amount=3):
         return self.news_items\
             .filter(active=True, category__type=category)\
-            .order_by("-score")[:amount]
+            .order_by("-score", "-date_created")[:amount]
 
     def save(self, *args, **kwargs):
         self.slug = slugify(self.title)

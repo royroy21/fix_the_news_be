@@ -17,7 +17,7 @@ class NewsItemViewSet(CustomCreateRetrieveListViewSet):
     pagination_class = CustomPageNumberPagination
     queryset = models.NewsItem.objects\
         .filter(active=True)\
-        .order_by("-score")
+        .order_by("-score", "-date_created")
     serializer_class = serializers.NewsItemSerializer
 
     def create(self, *args, **kwargs):
