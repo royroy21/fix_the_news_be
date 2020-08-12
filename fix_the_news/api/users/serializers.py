@@ -36,6 +36,8 @@ class CurrentUserSerializer(DjoserUserSerializer):
         )
 
     def save(self, **kwargs):
+        if self.validated_data["avatar"] is None:
+            self.validated_data["avatar_thumbnail_small"] = None
         user = super().save(**kwargs)
         if "avatar" in self.validated_data:
             on_commit(lambda: create_avatar_thumbnail.delay(user.id))
@@ -72,6 +74,8 @@ class CreatePasswordRetypeSerializer(DjoserUserCreateSerializer):
         return attrs
 
     def save(self, **kwargs):
+        if self.validated_data["avatar"] is None:
+            self.validated_data["avatar_thumbnail_small"] = None
         user = super().save(**kwargs)
         if "avatar" in self.validated_data:
             on_commit(lambda: create_avatar_thumbnail.delay(user.id))
