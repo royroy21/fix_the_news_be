@@ -10,7 +10,8 @@ from rest_framework.exceptions import ValidationError
 from fix_the_news.api.topics.serializers import CategoryReadOnlySerializer
 from fix_the_news.api.users.serializers import UserReadOnlySerializer
 from fix_the_news.news_items import models
-from fix_the_news.news_items.services.url_service import NewsItemURLService
+from fix_the_news.news_items.services import scoring_service
+from fix_the_news.news_items.services import url_service
 
 
 logger = logging.getLogger(__name__)
@@ -83,6 +84,14 @@ class NewsItemSerializer(serializers.ModelSerializer):
         news_source, _ = models.NewsSource.objects\
             .get_or_create(hostname=validated_data["url"])
         validated_data["news_source"] = news_source
+
+        # New news items are assigned a top score to get it maximum
+        # exposure.A task later on will assign it the correct score
+        service = scoring_service.NewsItemScoringService()
+        validated_data["score"] = service.get_highest_score(
+            topic=validated_data["topic"],
+            category=validated_data["category"],
+        )
         return super().create(validated_data)
 
     def validate(self, attrs):
@@ -104,7 +113,7 @@ class NewsItemSerializer(serializers.ModelSerializer):
             })
 
     def validate_url(self, url):
-        service = NewsItemURLService()
+        service = url_service.NewsItemURLService()
         parsed_url, error = service.parse_and_validate(url)
         if error:
             raise ValidationError(error)
