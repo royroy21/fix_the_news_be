@@ -11,4 +11,4 @@ class TopicViewSet(viewsets.ReadOnlyModelViewSet):
     serializer_class = serializers.TopicReadOnlySerializer
     queryset = models.Topic.objects\
         .filter(active=True)\
-        .order_by("-date_created")
+        .order_by("-priority", "-score", "-date_created")
