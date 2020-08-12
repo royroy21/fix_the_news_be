@@ -40,6 +40,12 @@ class Category(DateCreatedUpdatedMixin):
 
 class Topic(DateCreatedUpdatedMixin):
     active = models.BooleanField(default=True)
+    priority = models.BooleanField(
+        default=False,
+        help_text="If True moves this topic above "
+                  "other topics regardless of score",
+    )
+    score = models.PositiveIntegerField(default=0)
     slug = models.CharField(max_length=254, unique=True)
     title = models.CharField(max_length=254, unique=True)
     user = models.ForeignKey("users.User", on_delete=models.CASCADE)
@@ -47,14 +53,16 @@ class Topic(DateCreatedUpdatedMixin):
     def __str__(self):
         return f"{self.title} ({self.user})"
 
-    def check_all_categories_exist(self):
-        topic_categories = self.categories.values_list("type", flat=True)
-        all_categories = [
-            category_type
-            for category_type, _
-            in Category.TYPE_CHOICES
-        ]
-        return sorted(topic_categories) == sorted(all_categories)
+    def get_top_news_items(self, category, amount=3):
+        return self.news_items\
+            .filter(active=True, category__type=category)\
+            .order_by("-score", "-date_created")[:amount]
+
+    def save(self, *args, **kwargs):
+        self.slug = slugify(self.title)
+        super().save(*args, **kwargs)
+        if not self.categories.exists():
+            self.create_missing_categories()
 
     def create_missing_categories(self):
         topic_categories = self.categories.values_list("type", flat=True)
@@ -66,12 +74,10 @@ class Topic(DateCreatedUpdatedMixin):
         ]
         return Category.objects.bulk_create(missing_categories)
 
-    def get_top_news_items(self, category, amount=3):
-        # TODO - this slows the topics API when there are many news items
-        return self.news_items\
-            .filter(active=True, category__type=category)\
-            .order_by("-date_created")[:amount]
+    def get_score(self):
+        from fix_the_news.topics.services import scoring_service
+        return scoring_service.TopicScoringService().get_score(self)
 
-    def save(self, *args, **kwargs):
-        self.slug = slugify(self.title)
-        return super().save(*args, **kwargs)
+    def save_score(self):
+        self.score = self.get_score()
+        self.save()

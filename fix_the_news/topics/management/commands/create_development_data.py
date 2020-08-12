@@ -42,18 +42,10 @@ class Command(BaseCommand):
                     user=admin,
                     title=row["topic_title"],
                 )
-                category_query = topics_models.Category.objects.filter(
+                category = topics_models.Category.objects.get(
                     topic=topic,
                     type=row["topic_category"],
                 )
-                if category_query.exists():
-                    category = category_query.first()
-                else:
-                    category = topics_models.Category.objects.create(
-                        user=user,
-                        topic=topic,
-                        type=row["topic_category"],
-                    )
                 news_url = row["news_item_url"]
                 news_source, _ = news_items_models.NewsSource.objects\
                     .get_or_create(hostname=news_url)
@@ -71,16 +63,3 @@ class Command(BaseCommand):
                 ))
                 topics_ids.add(topic.id)
 
-        for topic_id in topics_ids:
-            topic = topics_models.Topic.objects.get(id=topic_id)
-            created_missing_categories = topic.create_missing_categories()
-            if created_missing_categories:
-                missing_categories_types = ",".join(
-                    category.type
-                    for category
-                    in created_missing_categories
-                )
-                self.stdout.write(self.style.SUCCESS(
-                    f"Created missing categories '{missing_categories_types}',"
-                    f" for topic: ({topic.id}) {topic.title}"
-                ))

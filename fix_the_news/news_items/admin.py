@@ -4,6 +4,15 @@ from fix_the_news.news_items import models
 
 
 class NewsItemAdmin(admin.ModelAdmin):
+    list_display = (
+        "title",
+        "user",
+        "score",
+        "date_created",
+    )
+    list_filter = (
+        "topic__title",
+    )
     ordering = (
         "date_created",
     )

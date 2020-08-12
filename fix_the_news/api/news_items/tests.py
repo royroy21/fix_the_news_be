@@ -3,11 +3,13 @@ from unittest.mock import patch
 from django_dynamic_fixture import G
 from django.test import TestCase
 from django.urls import reverse
+from rest_framework import status
 from rest_framework.test import APIClient
 
 from fix_the_news.news_items import models
 from fix_the_news.topics import models as topics_models
 from fix_the_news.users import models as users_models
+from fix_the_news.views import models as views_models
 
 
 class TestNewsItemViewSet(TestCase):
@@ -89,3 +91,20 @@ class TestNewsItemViewSet(TestCase):
         news_item_exists = \
             models.NewsItem.objects.filter(title=data["title"]).exists()
         self.assertFalse(news_item_exists)
+
+    def test_add_view(self):
+        news_item = G(models.NewsItem, views=0)
+        endpoint = reverse('newsitem-add-view', kwargs={'pk': news_item.id})
+
+        # first view
+        response = self.unauthenticated_client.post(endpoint)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        query = views_models.View.objects.filter(news_item=news_item)
+        self.assertEqual(query.count(), 1)
+
+        # second view
+        response = self.unauthenticated_client.post(endpoint)
+        self.assertEqual(
+            response.status_code,
+            status.HTTP_422_UNPROCESSABLE_ENTITY,
+        )

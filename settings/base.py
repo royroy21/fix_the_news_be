@@ -36,6 +36,7 @@ LOCAL_APPS = [
     'fix_the_news.news_items',
     'fix_the_news.topics',
     'fix_the_news.users',
+    'fix_the_news.views',
 ]
 
 THIRD_PARTY_APPS = [
@@ -72,7 +73,9 @@ ROOT_URLCONF = 'fix_the_news.core.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [
+            os.path.join(BASE_DIR, 'fix_the_news/templates'),
+        ],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
