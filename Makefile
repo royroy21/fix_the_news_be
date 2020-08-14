@@ -53,5 +53,11 @@ test:
 tests:
 	$(MAKE) test
 
-workers:
+default_workers:
 	@docker-compose run --rm django celery -A fix_the_news worker -l info -Q celery
+
+scoring_workers:
+	@docker-compose run --rm django celery -A fix_the_news worker -l info -Q scoring
+
+beat:
+	@docker-compose run --rm django celery -A fix_the_news beat -l info
