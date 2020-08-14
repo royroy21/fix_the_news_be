@@ -3,13 +3,14 @@ import logging
 
 from django.conf import settings
 from django.contrib.auth.models import AnonymousUser
+from django.db.transaction import on_commit
 from django.utils import timezone
 from rest_framework import serializers
 from rest_framework.exceptions import ValidationError
 
 from fix_the_news.api.topics.serializers import CategoryReadOnlySerializer
 from fix_the_news.api.users.serializers import UserReadOnlySerializer
-from fix_the_news.news_items import models
+from fix_the_news.news_items import models, tasks
 from fix_the_news.news_items.services import scoring_service
 from fix_the_news.news_items.services import url_service
 
@@ -92,7 +93,13 @@ class NewsItemSerializer(serializers.ModelSerializer):
             topic=validated_data["topic"],
             category=validated_data["category"],
         )
-        return super().create(validated_data)
+        news_item = super().create(validated_data)
+
+        on_commit(lambda: tasks.score_news_item.apply_async(
+            kwargs={"news_item_id": news_item.id},
+            countdown=settings.TIME_NEWS_ITEM_IS_TOP_SCORED,
+        ))
+        return news_item
 
     def validate(self, attrs):
         self.check_news_items_limit(attrs["user"])

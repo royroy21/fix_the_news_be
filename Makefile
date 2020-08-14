@@ -10,7 +10,9 @@
 	test \
 	tests \
 	usage \
-	workers \
+	default_workers \
+	scoring_workers \
+	beat \
 
 usage:
 	@echo "Available commands:"
@@ -24,7 +26,9 @@ usage:
 	@echo "test             Run Django tests"
 	@echo "tests            Run Django tests"
 	@echo "usage            Display available commands"
-	@echo "workers          Start celery workers"
+	@echo "default_workers  Start default workers"
+	@echo "scoring_workers  Start scoring workers"
+	@echo "beat             Start celery beat"
 
 chown:
 	@docker-compose run --rm django chown -R "`id -u`:`id -u`" "/code/${ARGS}"
@@ -53,5 +57,11 @@ test:
 tests:
 	$(MAKE) test
 
-workers:
+default_workers:
 	@docker-compose run --rm django celery -A fix_the_news worker -l info -Q celery
+
+scoring_workers:
+	@docker-compose run --rm django celery -A fix_the_news worker -l info -Q scoring
+
+beat:
+	@docker-compose run --rm django celery -A fix_the_news beat -l info

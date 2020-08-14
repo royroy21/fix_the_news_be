@@ -9,3 +9,6 @@ __pycache__
 
 # virtualenv
 venv
+
+# celery beat
+celerybeat-schedule
