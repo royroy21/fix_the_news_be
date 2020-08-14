@@ -1,7 +1,6 @@
 from django.contrib import admin
+from django.contrib.auth import get_user_model
 from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
-
-from fix_the_news.users.models import User
 
 
 class UserAdmin(BaseUserAdmin):
@@ -12,6 +11,8 @@ class UserAdmin(BaseUserAdmin):
             'last_name',
             'password',
             'last_login',
+            'has_viewed_welcome_communication',
+            'has_viewed_daily_communication',
         )}),
         ('Permissions', {'fields': (
             'is_active',
@@ -32,6 +33,8 @@ class UserAdmin(BaseUserAdmin):
                 'last_name',
                 'password1',
                 'password2',
+                'has_viewed_welcome_communication',
+                'has_viewed_daily_communication',
             ),
         }),
     )
@@ -42,6 +45,8 @@ class UserAdmin(BaseUserAdmin):
         'last_name',
         'is_staff',
         'last_login',
+        'has_viewed_welcome_communication',
+        'has_viewed_daily_communication',
     )
     list_filter = (
         'is_staff',
@@ -65,4 +70,4 @@ class UserAdmin(BaseUserAdmin):
     )
 
 
-admin.site.register(User, UserAdmin)
+admin.site.register(get_user_model(), UserAdmin)
