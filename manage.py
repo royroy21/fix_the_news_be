@@ -5,6 +5,7 @@ import sys
 
 
 def main():
+    # test
     os.environ.setdefault(
         'DJANGO_SETTINGS_MODULE',
         'fix_the_news.core.settings',
