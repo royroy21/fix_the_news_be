@@ -205,3 +205,7 @@ MEDIA_URL = "/media/"
 
 # How many news items a user can add within 24 hours
 NEWS_ITEMS_LIMIT = 5
+
+# Scoring topics and news items
+TIME_NEWS_ITEM_IS_TOP_SCORED = 3 * 60  # 3 hours
+TIME_TOPIC_IS_TOP_SCORED = 3 * 60  # 3 hours
