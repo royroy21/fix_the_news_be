@@ -35,15 +35,13 @@ class UserManager(auth_models.BaseUserManager):
         )
 
     def create_superuser(self, email, password, **extra_fields):
-        user = self._create_user(
+        return self._create_user(
             email,
             password,
             is_staff=True,
             is_superuser=True,
             **extra_fields,
         )
-        user.save(using=self._db)
-        return user
 
 
 class User(auth_models.AbstractBaseUser, auth_models.PermissionsMixin):
