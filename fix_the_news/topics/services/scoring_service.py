@@ -8,8 +8,10 @@ from fix_the_news.topics import models
 
 class TopicScoringService(BaseScoringService):
 
-    FIRST_DAYS_MULTIPLIER = 2
-    FIRST_WEEK_MULTIPLIER = 1
+    FIRST_FEW_DAYS_MULTIPLIER = 10
+    THIS_WEEK_MULTIPLIER = 5
+    LAST_WEEK_MULTIPLIER = 3
+    THIRD_WEEK_MULTIPLIER = 2
 
     def get_score(self, topic):
         news_items_score = self.get_score_for_news_items(topic)
@@ -28,27 +30,62 @@ class TopicScoringService(BaseScoringService):
 
     def get_score_for_comments(self, topic):
         dates = self.get_dates()
-        first_days = comments_models.Comment.objects.filter(
-            topic=topic,
-            date_created__gte=dates['first_days_start'],
-            date_created__lte=dates['now'],
-        ).count()
-        if first_days:
-            first_days_score = first_days * self.FIRST_DAYS_MULTIPLIER
-        else:
-            first_days_score = 0
 
-        first_week = comments_models.Comment.objects.filter(
-            topic=topic,
-            date_created__gte=dates['first_week_start'],
-            date_created__lte=dates['first_days_start']
-        ).count()
-        if first_week:
-            first_week_score = first_week * self.FIRST_WEEK_MULTIPLIER
-        else:
-            first_week_score = 0
+        first_days_score = self.calculate_score_for_time_period(
+            topic,
+            multiplier=self.FIRST_FEW_DAYS_MULTIPLIER,
+            start_date=dates['last_few_days']['start'],
+            end_date=dates['last_few_days']['end'],
+        )
+        this_week_score = self.calculate_score_for_time_period(
+            topic,
+            multiplier=self.THIS_WEEK_MULTIPLIER,
+            start_date=dates['this_week']['start'],
+            end_date=dates['this_week']['end'],
+        )
+        last_week_score = self.calculate_score_for_time_period(
+            topic,
+            multiplier=self.LAST_WEEK_MULTIPLIER,
+            start_date=dates['last_week']['start'],
+            end_date=dates['last_week']['end'],
+        )
+        third_week_score = self.calculate_score_for_time_period(
+            topic,
+            multiplier=self.THIRD_WEEK_MULTIPLIER,
+            start_date=dates['third_week']['start'],
+            end_date=dates['third_week']['end'],
+        )
+        the_rest_score = self.calculate_score_for_time_period(
+            topic,
+            multiplier=1,
+            start_date=None,
+            end_date=dates['third_week']['end'],
+        )
 
-        return first_days_score + first_week_score
+        score = (
+            first_days_score
+            + this_week_score
+            + last_week_score
+            + third_week_score
+            + the_rest_score
+        )
+        return score
+
+    def calculate_score_for_time_period(
+            self, topic, multiplier, start_date=None, end_date=None):
+        args = {
+            'topic': topic,
+        }
+        if start_date:
+            args['date_created__gte'] = start_date
+        if end_date:
+            args['date_created__lte'] = end_date
+        comments = comments_models.Comment.objects.filter(**args).count()
+
+        if comments:
+            return comments * multiplier
+        else:
+            return 0
 
     def get_highest_score(self):
         """ Returns highest topic score """

@@ -13,9 +13,9 @@ class NewsItemScoringService(BaseScoringService):
     so news items will score less over time unless they keep acquiring more
     likes and views.
     """
-    FIRST_DAYS_MULTIPLIER = 10
-    FIRST_WEEK_MULTIPLIER = 5
-    SECOND_WEEK_MULTIPLIER = 3
+    FIRST_FEW_DAYS_MULTIPLIER = 10
+    THIS_WEEK_MULTIPLIER = 5
+    LAST_WEEK_MULTIPLIER = 3
     THIRD_WEEK_MULTIPLIER = 2
 
     LIKES_MULTIPLIER = 4
@@ -23,52 +23,48 @@ class NewsItemScoringService(BaseScoringService):
 
     def get_score(self, news_item):
         dates = self.get_dates()
-        now = dates['now']
-        first_days_start = dates['first_days_start']
-        first_days_score = self.calculate_score_for_time_period(
+
+        last_few_days_score = self.calculate_score_for_time_period(
             news_item=news_item,
-            multiplier=self.FIRST_DAYS_MULTIPLIER,
-            start_date=first_days_start,
-            end_date=now,
+            multiplier=self.FIRST_FEW_DAYS_MULTIPLIER,
+            start_date=dates['last_few_days']['start'],
+            end_date=dates['last_few_days']['end'],
         )
-        first_week_start = dates['first_week_start']
-        first_week_score = self.calculate_score_for_time_period(
+        this_week_score = self.calculate_score_for_time_period(
             news_item=news_item,
-            multiplier=self.FIRST_WEEK_MULTIPLIER,
-            start_date=first_week_start,
-            end_date=first_days_start,
+            multiplier=self.THIS_WEEK_MULTIPLIER,
+            start_date=dates['this_week']['start'],
+            end_date=dates['this_week']['end'],
         )
-        second_week_start = dates['second_week_start']
-        second_week_score = self.calculate_score_for_time_period(
+        last_week_score = self.calculate_score_for_time_period(
             news_item=news_item,
-            multiplier=self.SECOND_WEEK_MULTIPLIER,
-            start_date=second_week_start,
-            end_date=first_week_start,
+            multiplier=self.LAST_WEEK_MULTIPLIER,
+            start_date=dates['last_week']['start'],
+            end_date=dates['last_week']['end'],
         )
-        third_week_start = dates['third_week_start']
         third_week_score = self.calculate_score_for_time_period(
             news_item=news_item,
             multiplier=self.THIRD_WEEK_MULTIPLIER,
-            start_date=third_week_start,
-            end_date=second_week_start,
+            start_date=dates['third_week']['start'],
+            end_date=dates['third_week']['end'],
         )
         the_rest_score = self.calculate_score_for_time_period(
             news_item=news_item,
             multiplier=1,
-            end_date=third_week_start,
+            end_date=dates['third_week']['start'],
         )
 
         total_score = (
-            first_days_score['total_score']
-            + first_week_score['total_score']
-            + second_week_score['total_score']
+            last_few_days_score['total_score']
+            + this_week_score['total_score']
+            + last_week_score['total_score']
             + third_week_score['total_score']
             + the_rest_score['total_score']
         )
         return {
-            'first_days_score': first_days_score,
-            'first_week_score': first_week_score,
-            'second_week_score': second_week_score,
+            'last_few_days_score': last_few_days_score,
+            'this_week_score': this_week_score,
+            'last_week_score': last_week_score,
             'third_week_score': third_week_score,
             'the_rest_score': the_rest_score,
             'total_score': total_score,
