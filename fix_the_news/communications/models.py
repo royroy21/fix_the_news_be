@@ -10,17 +10,26 @@ class Communication(DateCreatedUpdatedMixin):
                   'communications of the same type to False. The frontend'
                   ' app will be update next time it calls the user API',
     )
-    text = models.TextField()
+    title = models.CharField(max_length=254, default='')
+    text = models.TextField(default='')
 
-    WELCOME = "welcome"
-    DAILY = "daily"
+    ABOUT = 'about'
+    DAILY = 'daily'
+    PRIVACY = 'privacy'
+    REGISTRATION = 'registration'
+    TERMS_AND_CONDITIONS = 'terms_and_conditions'
+    WELCOME = 'welcome'
     TYPE_CHOICES = [
-        (WELCOME, "welcome"),
-        (DAILY, "daily"),
+        (ABOUT, 'about'),
+        (DAILY, 'daily'),
+        (PRIVACY, 'privacy'),
+        (REGISTRATION, 'registration'),
+        (TERMS_AND_CONDITIONS, 'terms_and_conditions'),
+        (WELCOME, 'welcome'),
     ]
     type = models.CharField(
         choices=TYPE_CHOICES,
-        max_length=7,
+        max_length=50,
     )
 
     def __str__(self):

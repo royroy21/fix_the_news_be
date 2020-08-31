@@ -8,7 +8,9 @@ class CommunicationReadOnlySerializer(serializers.ModelSerializer):
     class Meta:
         model = models.Communication
         fields = (
+            'id',
             'text',
+            'title',
             'type',
         )
         read_only_fields = fields
