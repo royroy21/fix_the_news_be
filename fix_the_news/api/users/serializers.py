@@ -29,7 +29,7 @@ class CurrentUserSerializer(DjoserUserSerializer):
             "id",
             "first_name",
             "last_name",
-            "has_viewed_welcome_communication",
+            "has_viewed_registration_communication",
             "has_viewed_daily_communication",
         )
         read_only_fields = (

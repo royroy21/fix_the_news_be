@@ -11,7 +11,7 @@ class UserAdmin(BaseUserAdmin):
             'last_name',
             'password',
             'last_login',
-            'has_viewed_welcome_communication',
+            'has_viewed_registration_communication',
             'has_viewed_daily_communication',
         )}),
         ('Permissions', {'fields': (
@@ -33,7 +33,7 @@ class UserAdmin(BaseUserAdmin):
                 'last_name',
                 'password1',
                 'password2',
-                'has_viewed_welcome_communication',
+                'has_viewed_registration_communication',
                 'has_viewed_daily_communication',
             ),
         }),
@@ -45,7 +45,7 @@ class UserAdmin(BaseUserAdmin):
         'last_name',
         'is_staff',
         'last_login',
-        'has_viewed_welcome_communication',
+        'has_viewed_registration_communication',
         'has_viewed_daily_communication',
     )
     list_filter = (
