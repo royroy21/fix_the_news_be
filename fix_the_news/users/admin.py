@@ -77,7 +77,7 @@ class UserAdmin(BaseUserAdmin):
 
 class MessageAdmin(admin.ModelAdmin):
     list_display = (
-        'get_email',
+        'email',
         'type',
     )
     list_filter = (

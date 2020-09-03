@@ -110,10 +110,5 @@ class Message(DateCreatedUpdatedMixin):
         blank=True,
     )
 
-    def get_email(self):
-        if self.user:
-            return self.user.email
-        return self.email
-
     def __str__(self):
-        return f'{self.get_email()}, {self.type}'
+        return f'{self.email}, {self.type}'
