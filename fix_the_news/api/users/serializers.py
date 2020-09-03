@@ -5,7 +5,7 @@ from django.utils.translation import ugettext_lazy as _
 from djoser.serializers import UserSerializer as DjoserUserSerializer
 from djoser.serializers import UserCreateSerializer as \
     DjoserUserCreateSerializer
-from rest_framework import serializers
+from rest_framework import serializers, fields
 from rest_framework.serializers import CharField
 
 from fix_the_news.users import models
@@ -104,10 +104,10 @@ class UserReadOnlySerializer(serializers.ModelSerializer):
 
 
 class MessageSerializer(serializers.ModelSerializer):
-
     class Meta:
         model = models.Message
         fields = (
+            'email',
             'text',
             'title',
             'type',

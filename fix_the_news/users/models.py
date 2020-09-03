@@ -87,7 +87,7 @@ class User(auth_models.AbstractBaseUser, auth_models.PermissionsMixin):
 
 
 class Message(DateCreatedUpdatedMixin):
-
+    email = models.CharField(max_length=254)
     text = models.TextField()
     title = models.CharField(max_length=254)
     CONTACT_US = 'contact_us'
@@ -100,7 +100,17 @@ class Message(DateCreatedUpdatedMixin):
         choices=TYPE_CHOICES,
         max_length=50,
     )
-    user = models.ForeignKey("users.User", on_delete=models.CASCADE)
+    user = models.ForeignKey(
+        'users.User',
+        on_delete=models.CASCADE,
+        null=True,
+        blank=True,
+    )
+
+    def get_email(self):
+        if self.user:
+            return self.user.email
+        return self.email
 
     def __str__(self):
-        return f'{self.user.email}, {self.type}'
+        return f'{self.get_email()}, {self.type}'
