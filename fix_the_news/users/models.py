@@ -72,6 +72,9 @@ class User(auth_models.AbstractBaseUser, auth_models.PermissionsMixin):
     has_viewed_registration_communication = models.BooleanField(default=False)
     has_viewed_daily_communication = models.BooleanField(default=False)
 
+    # settings
+    subscribe_to_emails = models.BooleanField(default=True)
+
     USERNAME_FIELD = "email"
     EMAIL_FIELD = "email"
     REQUIRED_FIELDS = []

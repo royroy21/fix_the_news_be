@@ -31,6 +31,7 @@ class CurrentUserSerializer(DjoserUserSerializer):
             "last_name",
             "has_viewed_registration_communication",
             "has_viewed_daily_communication",
+            "subscribe_to_emails",
         )
         read_only_fields = (
             "avatar_thumbnail_small",
