@@ -87,7 +87,10 @@ class User(auth_models.AbstractBaseUser, auth_models.PermissionsMixin):
 
 
 class Message(DateCreatedUpdatedMixin):
-    email = models.CharField(max_length=254)
+
+    email_validator = EmailValidator()
+
+    email = models.CharField(max_length=254, validators=[email_validator])
     text = models.TextField()
     title = models.CharField(max_length=254)
     CONTACT_US = 'contact_us'
