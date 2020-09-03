@@ -88,8 +88,8 @@ class User(auth_models.AbstractBaseUser, auth_models.PermissionsMixin):
 
 class Message(DateCreatedUpdatedMixin):
 
-    text = models.TextField(default='')
-    title = models.CharField(max_length=254, default='')
+    text = models.TextField()
+    title = models.CharField(max_length=254)
     CONTACT_US = 'contact_us'
     HELP = 'help'
     TYPE_CHOICES = [
