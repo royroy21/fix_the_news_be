@@ -3,6 +3,7 @@ from django.db import models
 from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
 
+from fix_the_news.core.models import DateCreatedUpdatedMixin
 from fix_the_news.users.validators import EmailValidator
 
 
@@ -83,3 +84,23 @@ class User(auth_models.AbstractBaseUser, auth_models.PermissionsMixin):
 
     def __str__(self):
         return self.email
+
+
+class Message(DateCreatedUpdatedMixin):
+
+    text = models.TextField(default='')
+    title = models.CharField(max_length=254, default='')
+    CONTACT_US = 'contact_us'
+    HELP = 'help'
+    TYPE_CHOICES = [
+        (CONTACT_US, 'contact_us'),
+        (HELP, 'help'),
+    ]
+    type = models.CharField(
+        choices=TYPE_CHOICES,
+        max_length=50,
+    )
+    user = models.ForeignKey("users.User", on_delete=models.CASCADE)
+
+    def __str__(self):
+        return f'{self.user.email}, {self.type}'

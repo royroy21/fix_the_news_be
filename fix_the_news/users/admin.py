@@ -2,6 +2,8 @@ from django.contrib import admin
 from django.contrib.auth import get_user_model
 from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
 
+from fix_the_news.users import models
+
 
 class UserAdmin(BaseUserAdmin):
     fieldsets = (
@@ -73,4 +75,26 @@ class UserAdmin(BaseUserAdmin):
     )
 
 
+class MessageAdmin(admin.ModelAdmin):
+    list_display = (
+        'user',
+        'type',
+    )
+    list_filter = (
+        'type',
+    )
+    ordering = (
+        'date_created',
+    )
+    search_fields = (
+        'text',
+        'title',
+        'type',
+        'user__email',
+        'user__first_name',
+        'user__last_name',
+    )
+
+
 admin.site.register(get_user_model(), UserAdmin)
+admin.site.register(models.Message, MessageAdmin)
