@@ -8,6 +8,7 @@ from djoser.serializers import UserCreateSerializer as \
 from rest_framework import serializers
 from rest_framework.serializers import CharField
 
+from fix_the_news.users import models
 from fix_the_news.users.tasks import create_avatar_thumbnail
 
 User = get_user_model()
@@ -100,3 +101,15 @@ class UserReadOnlySerializer(serializers.ModelSerializer):
             "last_name",
         )
         read_only_fields = fields
+
+
+class MessageSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = models.Message
+        fields = (
+            'text',
+            'title',
+            'type',
+            'user',
+        )
