@@ -15,7 +15,7 @@ class NewsItem(DateCreatedUpdatedMixin):
         related_name="news_items",
     )
     user = models.ForeignKey("users.User", on_delete=models.CASCADE)
-    url = models.CharField(max_length=254)
+    url = models.TextField()
     category = models.ForeignKey("topics.Category", on_delete=models.CASCADE)
     score = models.PositiveIntegerField(default=0)
     score_data = postgres_fields.JSONField(default=dict)
