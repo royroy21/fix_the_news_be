@@ -1,5 +1,7 @@
 from .base import *
 
+ENV = 'local'
+
 CORS_ORIGIN_WHITELIST = (
     "http://localhost:3000",
 )

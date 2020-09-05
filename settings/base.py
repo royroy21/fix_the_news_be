@@ -228,3 +228,5 @@ ENABLED_BEAT_SCHEDULES = [
     'score_all_news_items',
     'score_all_topics',
 ]
+
+ENV = None
