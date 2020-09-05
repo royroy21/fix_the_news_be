@@ -106,6 +106,9 @@ class NewsItemSerializer(serializers.ModelSerializer):
         return super().validate(attrs)
 
     def check_news_items_limit(self, user):
+        if user.no_upload_limit:
+            return
+        
         twenty_four_hours_ago = timezone.now() - timedelta(days=1)
         news_items_created = models.NewsItem.objects.filter(
             user=user,

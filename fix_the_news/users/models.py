@@ -72,6 +72,11 @@ class User(auth_models.AbstractBaseUser, auth_models.PermissionsMixin):
 
     has_viewed_registration_communication = models.BooleanField(default=False)
     has_viewed_daily_communication = models.BooleanField(default=False)
+    no_upload_limit = models.BooleanField(
+        default=False,
+        help_text='If true this user ignores upload'
+                  ' limits for topics and articles',
+    )
 
     # settings
     subscribe_to_emails = models.BooleanField(default=True)
