@@ -79,7 +79,7 @@ class User(auth_models.AbstractBaseUser, auth_models.PermissionsMixin):
     )
 
     # settings
-    subscribe_to_emails = models.BooleanField(default=True)
+    subscribe_to_emails = models.BooleanField(default=False)
 
     USERNAME_FIELD = "email"
     EMAIL_FIELD = "email"
