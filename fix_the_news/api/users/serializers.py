@@ -69,6 +69,7 @@ class CreatePasswordRetypeSerializer(DjoserUserCreateSerializer):
             "re_password",
             "first_name",
             "last_name",
+            "subscribe_to_emails",
         )
 
     def validate(self, attrs):
