@@ -1,5 +1,7 @@
 import csv
+from datetime import datetime
 
+import pytz
 from django.core.management.base import BaseCommand
 
 from fix_the_news.news_items import models as news_items_models
@@ -50,7 +52,7 @@ class Command(BaseCommand):
                 news_source, _ = news_items_models.NewsSource.objects\
                     .get_or_create(hostname=news_url)
                 news_item_title = row["news_item_title"]
-                news_items_models.NewsItem.objects.get_or_create(
+                news_item, created = news_items_models.NewsItem.objects.get_or_create(
                     title=news_item_title,
                     topic=topic,
                     user=user,
@@ -58,8 +60,15 @@ class Command(BaseCommand):
                     category=category,
                     news_source=news_source,
                 )
+                if created:
+                    date_created = \
+                        datetime.strptime(row["create_date"], "%Y-%m-%d")
+                    timezone_aware_date = pytz.utc.localize(date_created)
+                    news_item.date_created = timezone_aware_date
+                    news_item.date_updated = timezone_aware_date
+                    news_item.save()
+
                 self.stdout.write(self.style.SUCCESS(
                     f"Created news item: {news_item_title}"
                 ))
                 topics_ids.add(topic.id)
-
