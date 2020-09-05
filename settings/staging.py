@@ -4,6 +4,8 @@ from sentry_sdk.integrations.django import DjangoIntegration
 
 from .base import *
 
+ENV = 'staging'
+
 sentry_key = os.environ['SENTRY_KEY']
 sentry_org = os.environ['SENTRY_ORGANISATION']
 sentry_project = os.environ['SENTRY_PROJECT']
@@ -14,7 +16,8 @@ sentry_sdk.init(
         DjangoIntegration(),
     ],
     # Associates users to errors
-    send_default_pii=True
+    send_default_pii=True,
+    environment=ENV,
 )
 
 SECRET_KEY = os.environ["SECRET_KEY"]
