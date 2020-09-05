@@ -15,6 +15,7 @@ class UserAdmin(BaseUserAdmin):
             'last_login',
             'has_viewed_registration_communication',
             'has_viewed_daily_communication',
+            'no_upload_limit',
             'subscribe_to_emails',
         )}),
         ('Permissions', {'fields': (
@@ -38,6 +39,7 @@ class UserAdmin(BaseUserAdmin):
                 'password2',
                 'has_viewed_registration_communication',
                 'has_viewed_daily_communication',
+                'no_upload_limit',
                 'subscribe_to_emails',
             ),
         }),
@@ -51,6 +53,7 @@ class UserAdmin(BaseUserAdmin):
         'last_login',
         'has_viewed_registration_communication',
         'has_viewed_daily_communication',
+        'no_upload_limit',
         'subscribe_to_emails',
     )
     list_filter = (
