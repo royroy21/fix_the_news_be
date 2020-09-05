@@ -5,7 +5,7 @@ from fix_the_news.core.models import DateCreatedUpdatedMixin
 
 
 class Category(DateCreatedUpdatedMixin):
-    title = models.CharField(max_length=254)
+    title = models.CharField(max_length=254, blank=True, default="")
     topic = models.ForeignKey(
         "topics.Topic",
         on_delete=models.CASCADE,
