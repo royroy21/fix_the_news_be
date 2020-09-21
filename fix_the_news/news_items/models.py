@@ -18,7 +18,6 @@ class NewsItem(DateCreatedUpdatedMixin):
     url = models.TextField()
     category = models.ForeignKey("topics.Category", on_delete=models.CASCADE)
     score = models.PositiveIntegerField(default=0)
-    score_data = postgres_fields.JSONField(default=dict)
     news_source = models.ForeignKey(
         "news_items.NewsSource",
         on_delete=models.CASCADE,
@@ -38,7 +37,6 @@ class NewsItem(DateCreatedUpdatedMixin):
 
     def save_score(self):
         self.score_data = self.get_score()
-        self.score = self.score_data['total_score']
         self.save()
 
 
