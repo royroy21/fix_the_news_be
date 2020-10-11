@@ -18,8 +18,3 @@ class CommentViewSet(CustomCreateRetrieveListViewSet):
         .filter(active=True)\
         .order_by("-date_created")
     serializer_class = serializers.CommentSerializer
-
-    def create(self, request, *args, **kwargs):
-        if not self.request.user.is_authenticated:
-            return Response(status=status.HTTP_401_UNAUTHORIZED)
-        return super().create(request, *args, **kwargs)

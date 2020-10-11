@@ -90,6 +90,24 @@ class User(auth_models.AbstractBaseUser, auth_models.PermissionsMixin):
     def __str__(self):
         return self.email
 
+    ANONYMOUS_EMAIL = "@example.com"
+
+    @classmethod
+    def get_or_create_anonymous_user(cls, ipaddress):
+        """
+        So people can leave comments + like and add news items we create
+        anonymous users based upon their ip address. This is so we can
+        still enforce restrictions.
+
+        For example limit a user to one like per news item.
+        """
+        user, _ = cls.objects.get_or_create(
+            email=f"{str(ipaddress).replace('.', '__')}{cls.ANONYMOUS_EMAIL}",
+            first_name="anonymous",
+            last_name="",
+        )
+        return user
+
 
 class Message(DateCreatedUpdatedMixin):
 

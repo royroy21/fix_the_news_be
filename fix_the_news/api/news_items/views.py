@@ -20,11 +20,6 @@ class NewsItemViewSet(CustomCreateRetrieveListViewSet):
         .order_by("-score", "-date_created")
     serializer_class = serializers.NewsItemSerializer
 
-    def create(self, *args, **kwargs):
-        if not self.request.user.is_authenticated:
-            return Response(status=status.HTTP_401_UNAUTHORIZED)
-        return super().create(*args, **kwargs)
-
     @action(methods=['post'], detail=True, url_path='add-view')
     def add_view(self, request, *args, **kwargs):
         news_item = self.get_object()
