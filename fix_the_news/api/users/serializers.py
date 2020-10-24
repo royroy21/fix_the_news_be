@@ -94,7 +94,7 @@ class UserReadOnlySerializer(serializers.ModelSerializer):
     class Meta:
         model = User
         fields = tuple(User.REQUIRED_FIELDS) + (
-            settings.LOGIN_FIELD,
+            # settings.LOGIN_FIELD,
             "avatar",
             "avatar_thumbnail_small",
             "id",
