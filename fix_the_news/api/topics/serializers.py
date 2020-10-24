@@ -1,4 +1,6 @@
 from rest_framework import serializers
+
+from fix_the_news.api.users import serializers as users_serializers
 from fix_the_news.topics import models
 
 
@@ -19,7 +21,9 @@ class TopicReadOnlySerializer(serializers.ModelSerializer):
     comments_count = serializers.SerializerMethodField()
     serialized_categories = serializers.SerializerMethodField()
     news_items_count = serializers.SerializerMethodField()
+    total_news_items_count = serializers.SerializerMethodField()
     top_news_items = serializers.SerializerMethodField()
+    serialized_user = serializers.SerializerMethodField()
 
     class Meta:
         model = models.Topic
@@ -28,10 +32,13 @@ class TopicReadOnlySerializer(serializers.ModelSerializer):
             'comments_count',
             'date_created',
             'news_items_count',
+            'serialized_user',
+            'score',
             'serialized_categories',
             'slug',
             'title',
             'top_news_items',
+            'total_news_items_count',
             'user',
         )
         read_only_fields = fields
@@ -45,6 +52,9 @@ class TopicReadOnlySerializer(serializers.ModelSerializer):
             for key
             in models.Category.ALL_TYPE_CHOICES
         }
+
+    def get_total_news_items_count(self, obj):
+        return obj.news_items.filter(active=True).count()
 
     def get_serialized_categories(self, obj):
         """ Returns serialized categories sorted by category type choices """
@@ -69,3 +79,10 @@ class TopicReadOnlySerializer(serializers.ModelSerializer):
             for key
             in models.Category.ALL_TYPE_CHOICES
         }
+
+    def get_serialized_user(self, obj):
+        return users_serializers\
+            .UserReadOnlySerializer(
+                obj.user,
+                context={'request': self.context['request']})\
+            .data
