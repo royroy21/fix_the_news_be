@@ -62,11 +62,11 @@ class TopicAdmin(admin.ModelAdmin):
         "-date_created",
     )
     search_fields = (
-        "title",
+        "title__icontains",
         "title__startswith",
-        "user__email",
-        "user__first_name",
-        "user__last_name",
+        "user__email__icontains",
+        "user__first_name__icontains",
+        "user__last_name__icontains",
     )
 
 
