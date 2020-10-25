@@ -54,6 +54,7 @@ class TopicAdmin(admin.ModelAdmin):
     )
     list_filter = (
         "priority",
+        "active",
     )
     ordering = (
         "-priority",
