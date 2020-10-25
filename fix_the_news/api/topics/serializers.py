@@ -1,3 +1,5 @@
+from copy import deepcopy
+
 from rest_framework import serializers
 
 from fix_the_news.api.users import serializers as users_serializers
@@ -16,7 +18,7 @@ class CategoryReadOnlySerializer(serializers.ModelSerializer):
         read_only_fields = fields
 
 
-class TopicReadOnlySerializer(serializers.ModelSerializer):
+class TopicSerializer(serializers.ModelSerializer):
 
     comments_count = serializers.SerializerMethodField()
     serialized_categories = serializers.SerializerMethodField()
@@ -41,7 +43,18 @@ class TopicReadOnlySerializer(serializers.ModelSerializer):
             'total_news_items_count',
             'user',
         )
-        read_only_fields = fields
+        read_only_fields = (
+            'id',
+            'comments_count',
+            'date_created',
+            'news_items_count',
+            'serialized_user',
+            'score',
+            'serialized_categories',
+            'slug',
+            'top_news_items',
+            'total_news_items_count',
+        )
 
     def get_comments_count(self, obj):
         return obj.comments.count()
@@ -86,3 +99,13 @@ class TopicReadOnlySerializer(serializers.ModelSerializer):
                 obj.user,
                 context={'request': self.context['request']})\
             .data
+
+    def create(self, validated_data):
+        """
+        Topics created through this serializer have active set as False.
+        This is because topics created by users have to be vetted first
+        before published.
+        """
+        validated_data_copy = deepcopy(validated_data)
+        validated_data_copy['active'] = False
+        return super().create(validated_data_copy)
