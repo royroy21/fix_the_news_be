@@ -18,8 +18,7 @@ class NewsItemAdmin(admin.ModelAdmin):
     )
     search_fields = (
         "title",
-        "topic__title"
-        "type__title",
+        "topic__title",
         "user__email",
         "user__first_name",
         "user__last_name",
