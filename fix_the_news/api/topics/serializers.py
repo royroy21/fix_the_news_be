@@ -1,5 +1,6 @@
 from copy import deepcopy
 
+from django.db.models import Count
 from rest_framework import serializers
 
 from fix_the_news.api.users import serializers as users_serializers
@@ -26,6 +27,7 @@ class TopicSerializer(serializers.ModelSerializer):
     total_news_items_count = serializers.SerializerMethodField()
     serialized_user = serializers.SerializerMethodField()
     is_shared = serializers.SerializerMethodField()
+    number_of_likes = serializers.SerializerMethodField()
 
     class Meta:
         model = models.Topic
@@ -35,6 +37,7 @@ class TopicSerializer(serializers.ModelSerializer):
             'date_created',
             'is_shared',
             'news_items_count',
+            'number_of_likes',
             'serialized_user',
             'score',
             'serialized_categories',
@@ -49,6 +52,7 @@ class TopicSerializer(serializers.ModelSerializer):
             'date_created',
             'is_shared',
             'news_items_count',
+            'number_of_likes',
             'serialized_user',
             'score',
             'serialized_categories',
@@ -71,6 +75,9 @@ class TopicSerializer(serializers.ModelSerializer):
             for key
             in models.Category.ALL_TYPE_CHOICES
         }
+
+    def get_number_of_likes(self, obj):
+        return obj.news_items.aggregate(Count("likes"))["likes__count"]
 
     def get_total_news_items_count(self, obj):
         return obj.news_items.filter(active=True).count()
