@@ -5,8 +5,11 @@ from django.db import migrations
 def fill_user_name(apps, schema_editor):
     User = get_user_model()
     for user in User.objects.all():
-        user.name = f"{user.first_name} {user.last_name}"
-        user.save()
+        try:
+            user.name = f"{user.first_name} {user.last_name}"
+            user.save()
+        except:
+            pass
 
 
 def noop(apps, schema_editor):
