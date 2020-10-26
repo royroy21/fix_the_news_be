@@ -25,6 +25,7 @@ class TopicSerializer(serializers.ModelSerializer):
     news_items_count = serializers.SerializerMethodField()
     total_news_items_count = serializers.SerializerMethodField()
     serialized_user = serializers.SerializerMethodField()
+    is_shared = serializers.SerializerMethodField()
 
     class Meta:
         model = models.Topic
@@ -32,6 +33,7 @@ class TopicSerializer(serializers.ModelSerializer):
             'id',
             'comments_count',
             'date_created',
+            'is_shared',
             'news_items_count',
             'serialized_user',
             'score',
@@ -45,6 +47,7 @@ class TopicSerializer(serializers.ModelSerializer):
             'id',
             'comments_count',
             'date_created',
+            'is_shared',
             'news_items_count',
             'serialized_user',
             'score',
@@ -55,6 +58,12 @@ class TopicSerializer(serializers.ModelSerializer):
 
     def get_comments_count(self, obj):
         return obj.comments.count()
+
+    def get_is_shared(self, obj):
+        """
+        Indicates if the user is getting the topic via a shared link.
+        """
+        return False
 
     def get_news_items_count(self, obj):
         return {
