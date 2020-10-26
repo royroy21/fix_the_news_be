@@ -18,16 +18,12 @@ class CategoryReadOnlySerializer(serializers.ModelSerializer):
         read_only_fields = fields
 
 
-# TODO - Removed 'top_news_items' field for now as it was slowing down
-# API response and is not needed for FE topics list view. Remove field
-# completely if list view accepted.
 class TopicSerializer(serializers.ModelSerializer):
 
     comments_count = serializers.SerializerMethodField()
     serialized_categories = serializers.SerializerMethodField()
     news_items_count = serializers.SerializerMethodField()
     total_news_items_count = serializers.SerializerMethodField()
-    # top_news_items = serializers.SerializerMethodField()
     serialized_user = serializers.SerializerMethodField()
 
     class Meta:
@@ -42,7 +38,6 @@ class TopicSerializer(serializers.ModelSerializer):
             'serialized_categories',
             'slug',
             'title',
-            # 'top_news_items',
             'total_news_items_count',
             'user',
         )
@@ -55,7 +50,6 @@ class TopicSerializer(serializers.ModelSerializer):
             'score',
             'serialized_categories',
             'slug',
-            # 'top_news_items',
             'total_news_items_count',
         )
 
@@ -84,18 +78,6 @@ class TopicSerializer(serializers.ModelSerializer):
             for category_type, _
             in models.Category.TYPE_CHOICES
         ]
-
-    # TODO - remove this? See comment above
-    def get_top_news_items(self, obj):
-        from fix_the_news.api.news_items.serializers import NewsItemSerializer
-        return {
-            key: NewsItemSerializer(
-                obj.get_top_news_items(key),
-                many=True,
-                context=self.context).data
-            for key
-            in models.Category.ALL_TYPE_CHOICES
-        }
 
     def get_serialized_user(self, obj):
         return users_serializers\
