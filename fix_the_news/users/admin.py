@@ -9,8 +9,7 @@ class UserAdmin(BaseUserAdmin):
     fieldsets = (
         (None, {'fields': (
             'email',
-            'first_name',
-            'last_name',
+            'name',
             'password',
             'last_login',
             'has_viewed_registration_communication',
@@ -33,8 +32,7 @@ class UserAdmin(BaseUserAdmin):
             ),
             'fields': (
                 'email',
-                'first_name',
-                'last_name',
+                'name',
                 'password1',
                 'password2',
                 'has_viewed_registration_communication',
@@ -47,8 +45,7 @@ class UserAdmin(BaseUserAdmin):
 
     list_display = (
         'email',
-        'first_name',
-        'last_name',
+        'name',
         'is_staff',
         'last_login',
         'has_viewed_registration_communication',
@@ -63,9 +60,8 @@ class UserAdmin(BaseUserAdmin):
         'groups',
     )
     search_fields = (
-        'email',
-        'first_name',
-        'last_name',
+        'email__icontains',
+        'name__icontains',
     )
     ordering = (
         'email',
@@ -93,9 +89,8 @@ class MessageAdmin(admin.ModelAdmin):
         'text',
         'title',
         'type',
-        'user__email',
-        'user__first_name',
-        'user__last_name',
+        'user__email__icontains',
+        'user__name__icontains',
     )
 
 

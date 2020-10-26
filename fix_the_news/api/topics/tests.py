@@ -42,4 +42,4 @@ class TestTopicViewSet(TestCase):
             .filter(title=topic_title, active=False)\
             .first()
         self.assertTrue(topic)
-        self.assertEqual(topic.user.first_name, "anonymous")
+        self.assertEqual(topic.user.name, "anonymous")

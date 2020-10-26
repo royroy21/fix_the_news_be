@@ -28,8 +28,7 @@ class CurrentUserSerializer(DjoserUserSerializer):
             "avatar",
             "avatar_thumbnail_small",
             "id",
-            "first_name",
-            "last_name",
+            "name",
             "has_viewed_registration_communication",
             "has_viewed_daily_communication",
             "subscribe_to_emails",
@@ -67,8 +66,7 @@ class CreatePasswordRetypeSerializer(DjoserUserCreateSerializer):
             "avatar",
             "password",
             "re_password",
-            "first_name",
-            "last_name",
+            "name",
             "subscribe_to_emails",
         )
 
@@ -94,12 +92,10 @@ class UserReadOnlySerializer(serializers.ModelSerializer):
     class Meta:
         model = User
         fields = tuple(User.REQUIRED_FIELDS) + (
-            # settings.LOGIN_FIELD,
             "avatar",
             "avatar_thumbnail_small",
             "id",
-            "first_name",
-            "last_name",
+            "name",
         )
         read_only_fields = fields
 
