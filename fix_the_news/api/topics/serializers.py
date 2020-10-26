@@ -1,4 +1,8 @@
+from copy import deepcopy
+
 from rest_framework import serializers
+
+from fix_the_news.api.users import serializers as users_serializers
 from fix_the_news.topics import models
 
 
@@ -14,12 +18,13 @@ class CategoryReadOnlySerializer(serializers.ModelSerializer):
         read_only_fields = fields
 
 
-class TopicReadOnlySerializer(serializers.ModelSerializer):
+class TopicSerializer(serializers.ModelSerializer):
 
     comments_count = serializers.SerializerMethodField()
     serialized_categories = serializers.SerializerMethodField()
     news_items_count = serializers.SerializerMethodField()
-    top_news_items = serializers.SerializerMethodField()
+    total_news_items_count = serializers.SerializerMethodField()
+    serialized_user = serializers.SerializerMethodField()
 
     class Meta:
         model = models.Topic
@@ -28,13 +33,25 @@ class TopicReadOnlySerializer(serializers.ModelSerializer):
             'comments_count',
             'date_created',
             'news_items_count',
+            'serialized_user',
+            'score',
             'serialized_categories',
             'slug',
             'title',
-            'top_news_items',
+            'total_news_items_count',
             'user',
         )
-        read_only_fields = fields
+        read_only_fields = (
+            'id',
+            'comments_count',
+            'date_created',
+            'news_items_count',
+            'serialized_user',
+            'score',
+            'serialized_categories',
+            'slug',
+            'total_news_items_count',
+        )
 
     def get_comments_count(self, obj):
         return obj.comments.count()
@@ -45,6 +62,9 @@ class TopicReadOnlySerializer(serializers.ModelSerializer):
             for key
             in models.Category.ALL_TYPE_CHOICES
         }
+
+    def get_total_news_items_count(self, obj):
+        return obj.news_items.filter(active=True).count()
 
     def get_serialized_categories(self, obj):
         """ Returns serialized categories sorted by category type choices """
@@ -59,13 +79,19 @@ class TopicReadOnlySerializer(serializers.ModelSerializer):
             in models.Category.TYPE_CHOICES
         ]
 
-    def get_top_news_items(self, obj):
-        from fix_the_news.api.news_items.serializers import NewsItemSerializer
-        return {
-            key: NewsItemSerializer(
-                obj.get_top_news_items(key),
-                many=True,
-                context=self.context).data
-            for key
-            in models.Category.ALL_TYPE_CHOICES
-        }
+    def get_serialized_user(self, obj):
+        return users_serializers\
+            .UserReadOnlySerializer(
+                obj.user,
+                context={'request': self.context['request']})\
+            .data
+
+    def create(self, validated_data):
+        """
+        Topics created through this serializer have active set as False.
+        This is because topics created by users have to be vetted first
+        before published.
+        """
+        validated_data_copy = deepcopy(validated_data)
+        validated_data_copy['active'] = False
+        return super().create(validated_data_copy)

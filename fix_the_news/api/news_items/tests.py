@@ -83,14 +83,17 @@ class TestNewsItemViewSet(TestCase):
             models.NewsItem.objects.filter(title=data["title"]).exists()
         self.assertTrue(news_item_exists)
 
-    def test_create_with_unauthenticated_user(self):
+    @patch('requests.get')
+    def test_create_with_unauthenticated_user(self, mock_request):
+        mock_request.ok = True
+
         data = self.get_create_new_news_item_data()
         response = \
             self.unauthenticated_client.post(self.list_endpoint, data=data)
-        self.assertEqual(response.status_code, 401)
+        self.assertEqual(response.status_code, 201)
         news_item_exists = \
             models.NewsItem.objects.filter(title=data["title"]).exists()
-        self.assertFalse(news_item_exists)
+        self.assertTrue(news_item_exists)
 
     def test_add_view(self):
         news_item = G(models.NewsItem, views=0)

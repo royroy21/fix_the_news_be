@@ -1,7 +1,6 @@
 from urllib.parse import urlparse
 
 from django.db import models
-from django.contrib.postgres import fields as postgres_fields
 from fix_the_news.core.models import DateCreatedUpdatedMixin
 from fix_the_news.news_items.services import scoring_service
 
