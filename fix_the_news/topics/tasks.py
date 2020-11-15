@@ -1,22 +1,20 @@
-from celery import shared_task
-from celery.utils.log import get_task_logger
+import logging
+
 from django.utils import timezone
 
 from fix_the_news.topics import models
 from fix_the_news.topics.services import scoring_service
 
 
-logger = get_task_logger(__name__)
+logger = logging.getLogger(__name__)
 
 
-@shared_task
 def score_topic(topic_id):
     topic = models.Topic.objects.get(id=topic_id)
     topic.score = scoring_service.TopicScoringService().get_score(topic)
     topic.save()
 
 
-@shared_task
 def score_all_topics():
     start = timezone.now()
     # TODO - Find a solution to remove topics without activity

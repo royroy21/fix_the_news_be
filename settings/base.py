@@ -192,11 +192,6 @@ LOGGING = {
             'level': 'DEBUG',
             'propagate': False,
         },
-        'celery': {
-            'handlers': ['console'],
-            'level': 'DEBUG',
-            'propagate': False,
-        },
     },
 }
 
@@ -207,26 +202,7 @@ MEDIA_URL = "/media/"
 NEWS_ITEMS_LIMIT = 5
 
 # Scoring topics and news items
-TIME_NEWS_ITEM_IS_TOP_SCORED = 3 * 60 * 60  # 3 hours
-TIME_TOPIC_IS_TOP_SCORED = 3 * 60 * 60  # 3 hours
 SCORE_ALL_NEWS_ITEMS_SCHEDULE = 3 * 60 * 60  # 3 hours
 SCORE_ALL_TOPICS_SCHEDULE = 3 * 60 * 60  # 3 hours
-
-# Celery
-AVAILABLE_BEAT_SCHEDULES = {
-    'score_all_news_items': {
-        'task': 'fix_the_news.news_items.tasks.score_all_news_items',
-        'schedule': SCORE_ALL_NEWS_ITEMS_SCHEDULE,
-    },
-    'score_all_topics': {
-        'task': 'fix_the_news.topics.tasks.score_all_topics',
-        'schedule': SCORE_ALL_TOPICS_SCHEDULE,
-    },
-}
-
-ENABLED_BEAT_SCHEDULES = [
-    'score_all_news_items',
-    'score_all_topics',
-]
 
 ENV = None

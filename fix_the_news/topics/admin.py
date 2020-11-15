@@ -1,4 +1,3 @@
-from django.conf import settings
 from django.contrib import admin
 from django.db.transaction import on_commit
 
@@ -37,10 +36,7 @@ class TopicAdmin(admin.ModelAdmin):
             obj.score = \
                 scoring_service.TopicScoringService().get_highest_score()
             obj.save()
-            on_commit(lambda: tasks.score_topic.apply_async(
-                kwargs={"topic_id": obj.id},
-                countdown=settings.TIME_TOPIC_IS_TOP_SCORED,
-            ))
+            on_commit(lambda: tasks.score_topic(obj.id))
         if '_calculate_score' in request.POST:
             obj.save_score()
         return super().response_change(request, obj)

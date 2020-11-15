@@ -1,15 +1,14 @@
-from celery import shared_task
-from celery.utils.log import get_task_logger
+import logging
+
 from django.utils import timezone
 
 from fix_the_news.news_items import models
 from fix_the_news.news_items.services import scoring_service
 
 
-logger = get_task_logger(__name__)
+logger = logging.getLogger(__name__)
 
 
-@shared_task
 def score_news_item(news_item_id):
     news_item = models.NewsItem.objects.get(id=news_item_id)
     news_item.score = scoring_service.NewsItemScoringService()\
@@ -17,7 +16,6 @@ def score_news_item(news_item_id):
     news_item.save()
 
 
-@shared_task
 def score_all_news_items():
     start = timezone.now()
     # TODO - Find a solution to remove news items without activity

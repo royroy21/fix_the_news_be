@@ -5,7 +5,7 @@ from django.utils.translation import ugettext_lazy as _
 from djoser.serializers import UserSerializer as DjoserUserSerializer
 from djoser.serializers import UserCreateSerializer as \
     DjoserUserCreateSerializer
-from rest_framework import serializers, fields
+from rest_framework import serializers
 from rest_framework.serializers import CharField
 
 from fix_the_news.users import models
@@ -44,7 +44,7 @@ class CurrentUserSerializer(DjoserUserSerializer):
             self.validated_data["avatar_thumbnail_small"] = None
         user = super().save(**kwargs)
         if "avatar" in self.validated_data:
-            on_commit(lambda: create_avatar_thumbnail.delay(user.id))
+            on_commit(lambda: create_avatar_thumbnail(user.id))
         return user
 
 
@@ -83,7 +83,7 @@ class CreatePasswordRetypeSerializer(DjoserUserCreateSerializer):
             self.validated_data["avatar_thumbnail_small"] = None
         user = super().save(**kwargs)
         if "avatar" in self.validated_data:
-            on_commit(lambda: create_avatar_thumbnail.delay(user.id))
+            on_commit(lambda: create_avatar_thumbnail(user.id))
         return user
 
 

@@ -28,25 +28,9 @@ services:
       - "8000:8000"
     depends_on:
       - db
-      - rabbit
     stdin_open: true
     tty: true
-
-  rabbit:
-    image: rabbitmq:3.8.5-management
-    restart: unless-stopped
-    hostname: rabbit
-    environment:
-      RABBITMQ_DEFAULT_USER: guest
-      RABBITMQ_DEFAULT_PASS: guest
-      RABBITMQ_ERLANG_COOKIE: "SECRET_COOKIE"
-    volumes:
-      - rabbit-data:/var/lib/rabbitmq
-    ports:
-      - "15673:15672"
-      - "9672:5672"
 
 
 volumes:
   data-volume:
-  rabbit-data:
