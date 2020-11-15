@@ -37,5 +37,3 @@ LOGGING = {
         },
     },
 }
-
-CELERY_BROKER_URL = "amqp://rabbit"

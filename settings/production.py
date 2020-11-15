@@ -59,5 +59,3 @@ AWS_S3_OBJECT_PARAMETERS = {
 }
 
 DEFAULT_FILE_STORAGE = "fix_the_news.custom_storage.S3MediaStorage"
-
-CELERY_BROKER_URL = os.environ["CELERY_BROKER_URL"]
