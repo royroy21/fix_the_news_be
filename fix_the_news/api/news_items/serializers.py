@@ -31,9 +31,11 @@ class NewsItemSerializer(serializers.ModelSerializer):
             'category',
             'date_created',
             'id',
+            'image',
             'like',
             'likes_count',
             'news_source',
+            'original_image_url',
             'score',
             'serialized_category',
             'serialized_user',
@@ -45,9 +47,11 @@ class NewsItemSerializer(serializers.ModelSerializer):
         )
         read_only_fields = (
             'id',
+            'image',
             'date_created',
             'like',
             'likes_count',
+            'original_image_url',
             'score',
             'serialized_category',
             'serialized_user',
