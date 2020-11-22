@@ -1,6 +1,7 @@
 from urllib.parse import urlparse
 
 from django.db import models
+
 from fix_the_news.core.models import DateCreatedUpdatedMixin
 from fix_the_news.news_items.services import scoring_service
 
@@ -22,6 +23,14 @@ class NewsItem(DateCreatedUpdatedMixin):
         on_delete=models.CASCADE,
         related_name="news_items",
     )
+
+    original_image_url = models.TextField(default="")
+    image = models.ImageField(
+        upload_to="news_item_images",
+        blank=True,
+        null=True,
+    )
+    tried_to_add_image = models.BooleanField(default=False)
 
     def __str__(self):
         return f"{self.title} ({self.topic})"
