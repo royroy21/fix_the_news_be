@@ -20,8 +20,7 @@ class ImageService:
                       "AppleWebKit/537.36 (KHTML, like Gecko) "
                       "Chrome/83.0.4103.61 Safari/537.36",
     }
-    SIZE = (100, 100)
-    QUALITY = 100
+    SIZE = (150, 150)
 
     def run(self, news_item):
         logger.info(
@@ -109,8 +108,11 @@ class ImageService:
         image_io = BytesIO()
         image.save(
             image_io,
-            image.format,
-            quality=self.QUALITY,
+            format=image.format,
+            compress_level=5,
+            optimize=True,
+            quality=100,
+            subsampling=0,
         )
         return image, image_io
 
@@ -126,8 +128,3 @@ class ImageService:
             news_item.title,
         )
         news_item.save()
-        logger.info(
-            "Image saved for news item #%i:%s",
-            news_item.id,
-            news_item.title,
-        )

@@ -100,11 +100,11 @@ class User(auth_models.AbstractBaseUser, auth_models.PermissionsMixin):
 
         For example limit a user to one like per news item.
         """
-        user, _ = cls.objects.get_or_create(
-            email=f"{str(ipaddress).replace('.', '__')}{cls.ANONYMOUS_EMAIL}",
-            name="anonymous",
-        )
-        return user
+        email = f"{str(ipaddress).replace('.', '__')}{cls.ANONYMOUS_EMAIL}"
+        user_query = cls.objects.filter(email=email)
+        if user_query.exists():
+            return user_query.first()
+        return cls.objects.create(email=email, name="anonymous")
 
 
 class Message(DateCreatedUpdatedMixin):
