@@ -28,6 +28,7 @@ class TopicSerializer(serializers.ModelSerializer):
     serialized_user = serializers.SerializerMethodField()
     is_shared = serializers.SerializerMethodField()
     number_of_likes = serializers.SerializerMethodField()
+    last_updated = serializers.SerializerMethodField()
 
     class Meta:
         model = models.Topic
@@ -36,6 +37,7 @@ class TopicSerializer(serializers.ModelSerializer):
             'comments_count',
             'date_created',
             'is_shared',
+            'last_updated',
             'news_items_count',
             'number_of_likes',
             'serialized_user',
@@ -51,6 +53,7 @@ class TopicSerializer(serializers.ModelSerializer):
             'comments_count',
             'date_created',
             'is_shared',
+            'last_updated',
             'news_items_count',
             'number_of_likes',
             'serialized_user',
@@ -68,6 +71,12 @@ class TopicSerializer(serializers.ModelSerializer):
         Indicates if the user is getting the topic via a shared link.
         """
         return False
+
+    def get_last_updated(self, obj):
+        last_added_news_item = obj.news_items.order_by('date_created').last()
+        if last_added_news_item:
+            return last_added_news_item.date_created
+        return obj.date_created
 
     def get_news_items_count(self, obj):
         return {
