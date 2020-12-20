@@ -35,6 +35,7 @@ LOCAL_APPS = [
     'fix_the_news.communications',
     'fix_the_news.likes',
     'fix_the_news.news_items',
+    'fix_the_news.subscriptions',
     'fix_the_news.topics',
     'fix_the_news.users',
     'fix_the_news.views',
