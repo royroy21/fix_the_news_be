@@ -25,7 +25,7 @@ ipython-genutils==0.2.0
 jedi==0.16.0
 jmespath==0.10.0
 kombu==4.6.11
-lxml==4.6.1
+lxml==4.6.2
 parso==0.6.2
 pexpect==4.8.0
 pickleshare==0.7.5
