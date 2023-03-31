@@ -35,11 +35,17 @@ class Command(BaseCommand):
                     self.stdout.write(self.style.ERROR(
                         f"problem encountered: skipping row {row}"
                     ))
-                user, _ = users_models.User.objects.get_or_create(
+
+                user_query = users_models.User.objects.filter(
                     email=row["email"],
-                    first_name=row["first_name"],
-                    last_name=row["last_name"],
                 )
+                if user_query.exists():
+                    user = user_query.first()
+                else:
+                    user = users_models.User.objects.create_user(
+                        email=row["email"],
+                        password="pa$$word",
+                    )
                 topic, _ = topics_models.Topic.objects.get_or_create(
                     user=admin,
                     title=row["topic_title"],

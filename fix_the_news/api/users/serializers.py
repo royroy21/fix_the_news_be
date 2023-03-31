@@ -1,7 +1,6 @@
 from django.contrib.auth import get_user_model
 from django.conf import settings
 from django.db.transaction import on_commit
-from django.utils.translation import ugettext_lazy as _
 from djoser.serializers import UserSerializer as DjoserUserSerializer
 from djoser.serializers import UserCreateSerializer as \
     DjoserUserCreateSerializer
@@ -56,7 +55,7 @@ class CreatePasswordRetypeSerializer(DjoserUserCreateSerializer):
     )
 
     default_error_messages = {
-        'password_mismatch': _('Password fields do not match.'),
+        'password_mismatch': 'Password fields do not match.',
     }
 
     class Meta:
